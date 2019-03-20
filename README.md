@@ -1,5 +1,7 @@
 # Swagger UI
 
+Note: Travis build to be disabled as there are linting issues in the existing code and it has never pass the travis build since it is forked.
+
 [![NPM version](https://badge.fury.io/js/swagger-ui.svg)](http://badge.fury.io/js/swagger-ui)
 
 ## New!
