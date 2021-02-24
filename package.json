@@ -112,7 +112,7 @@
     "less-loader": "4.0.4",
     "license-checker": "^11.0.0",
     "mocha": "^3.4.2",
-    "node-sass": "^4.5.0",
+    "node-sass": "^4.13.1",
     "npm-run-all": "4.0.2",
     "null-loader": "0.1.1",
     "open": "0.0.5",
