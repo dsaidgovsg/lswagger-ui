@@ -44,7 +44,7 @@
     "immutable": "^3.x.x",
     "js-yaml": "^3.5.5",
     "less": "2.7.1",
-    "lodash": "4.17.2",
+    "lodash": "4.17.21",
     "matcher": "^0.1.2",
     "memoizee": "0.4.1",
     "promise-worker": "^1.1.1",
