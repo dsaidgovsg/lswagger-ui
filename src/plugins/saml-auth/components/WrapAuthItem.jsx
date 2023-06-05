@@ -1,8 +1,19 @@
-/* eslint-disable react/prop-types */
 import React from "react"
+import PropTypes from "prop-types"
 import SamlAuth from "./SamlAuth"
 
 export default class WrappedAuthItem extends React.Component {
+  static propTypes = {
+    schema: PropTypes.object.isRequired,
+    getSystem: PropTypes.func.isRequired,
+    getComponent: PropTypes.func.isRequired,
+    errSelectors: PropTypes.object.isRequired,
+    authSelectors: PropTypes.object.isRequired,
+    authorized: PropTypes.object,
+    onAuthChange: PropTypes.func,
+    name: PropTypes.string,
+  }
+
   constructor(props) {
     super(props)
   }
@@ -11,10 +22,12 @@ export default class WrappedAuthItem extends React.Component {
     const {
       schema,
       getComponent,
+      authSelectors,
       errSelectors,
       authorized,
       onAuthChange,
       name,
+      getSystem,
     } = this.props
 
     const type = schema.get("type")
@@ -26,12 +39,12 @@ export default class WrappedAuthItem extends React.Component {
           key={name}
           schema={schema}
           name={name}
-          authSelectors={this.props.authSelectors}
+          authSelectors={authSelectors}
           errSelectors={errSelectors}
           authorized={authorized}
           getComponent={getComponent}
           onChange={onAuthChange}
-          samlAuthActions={this.props.samlAuthActions}
+          samlAuthActions={getSystem().samlAuthActions}
         />
       )
     }

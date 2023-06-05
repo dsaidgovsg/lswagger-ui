@@ -26,8 +26,9 @@ export default class AuthorizationPopup extends React.Component {
   };
 
   componentDidUpdate() {
+    const { samlAuthSelectors } = this.props
     let isSamlAuthenticated =
-      this.props.samlAuthSelectors.samlAuthState() ===
+      samlAuthSelectors.samlAuthState() ===
       "SAML_AUTH_STATE_LOGGED_IN"
     if (isSamlAuthenticated) {
       // unset url search
@@ -44,6 +45,7 @@ export default class AuthorizationPopup extends React.Component {
       getComponent,
       errSelectors,
       specSelectors,
+      getSystem,
       fn: { AST = {} },
     } = this.props
     let definitions = authSelectors.shownDefinitions()
@@ -64,6 +66,8 @@ export default class AuthorizationPopup extends React.Component {
       isAuthenticated && selectedIndex > -1
         ? selectedIndex
         : selectedDefinition
+
+    let loginDisclaimer = specSelectors.spec().get("loginDisclaimer")
 
     let isSamlAuthenticating =
       samlAuthSelectors.samlAuthState() === "SAML_AUTH_STATE_LOGGING_IN"
@@ -127,9 +131,11 @@ export default class AuthorizationPopup extends React.Component {
                           authSelectors={authSelectors}
                           authActions={authActions}
                           specSelectors={specSelectors}
+                          getSystem={getSystem}
                         />
                       )
                     })}
+                    <div className="login-disclaimer">{loginDisclaimer}</div>
               </div>
             </div>
           </div>
@@ -147,5 +153,6 @@ export default class AuthorizationPopup extends React.Component {
     authActions: PropTypes.object.isRequired,
     errActions: PropTypes.object.isRequired,
     samlAuthSelectors: PropTypes.object.isRequired,
+    getSystem: PropTypes.func.isRequired,
   };
 }
