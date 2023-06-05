@@ -43,7 +43,7 @@ export default class Auths extends React.Component {
   }
 
   render() {
-    let { definitions, getComponent, authSelectors, errSelectors } = this.props
+    let { definitions, getComponent, authSelectors, errSelectors, getSystem } = this.props
     const ApiKeyAuth = getComponent("apiKeyAuth")
     const BasicAuth = getComponent("basicAuth")
     const BasicJwtAuth = getComponent("basicJwtAuth", true)
@@ -75,6 +75,8 @@ export default class Auths extends React.Component {
                   case "apiKey": authEl = <ApiKeyAuth key={ name }
                                                       schema={ schema }
                                                       name={ name }
+                                                      getSystem={ getSystem }
+                                                      authSelectors={ authSelectors }
                                                       errSelectors={ errSelectors }
                                                       authorized={ authorized }
                                                       getComponent={ getComponent }
@@ -160,6 +162,7 @@ export default class Auths extends React.Component {
   }
 
   static propTypes = {
+    getSystem: PropTypes.func.isRequired,
     errSelectors: PropTypes.object.isRequired,
     getComponent: PropTypes.func.isRequired,
     authSelectors: PropTypes.object.isRequired,

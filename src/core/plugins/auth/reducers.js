@@ -27,9 +27,10 @@ export default {
     securities.entrySeq().forEach( ([ key, security ]) => {
       let type = security.getIn(["schema", "type"])
       let tokenUrl = security.getIn(["schema", "tokenUrl"])
+      let authTokenUrl = security.getIn(["schema", "authTokenUrl"])
 
       if ( type === "apiKey") {
-        if(!tokenUrl) {
+        if(!tokenUrl && !authTokenUrl) {
           map = map.set(key, security)
         } else {
           let name = security.get("name")

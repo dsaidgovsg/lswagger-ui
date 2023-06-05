@@ -60,7 +60,7 @@ export const authenticateWithSAMLToken = (schema, samlToken) => async ( { fn, sa
   const authQuery = schema.get("authQuery")
   const query = authQuery && authQuery.toJS()
 
-  const fetchUrl = appendQuery(schema.get("authUrl"), query)
+  const fetchUrl = appendQuery(schema.get("authTokenUrl"), query)
 
   // 1. decode jwt
   const [decoded, decodeErr] = decodeJWT(samlToken)
@@ -133,8 +133,9 @@ export const authenticateWithSAMLToken = (schema, samlToken) => async ( { fn, sa
   authActions.authorize({
     [authId]: {
       name: authId,
-      schema,
-      value: data.token
+      email: decoded.sub,
+      token: data.token,
+      schema
     }
   })
   samlAuthActions.saveSamlAuthEmail(decoded.sub)
