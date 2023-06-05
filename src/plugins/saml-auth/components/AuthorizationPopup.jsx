@@ -6,7 +6,7 @@ export default class AuthorizationPopup extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedDefinition: null,
+      selectedDefinitionOption: null,
     }
   }
 
@@ -18,11 +18,11 @@ export default class AuthorizationPopup extends React.Component {
   };
 
   onSelectDefinition = (definition) => {
-    this.setState({ selectedDefinition: definition })
+    this.setState({ selectedDefinitionOption: definition })
   };
 
   onClearSelectDefinition = () => {
-    this.setState({ selectedDefinition: null })
+    this.setState({ selectedDefinitionOption: null })
   };
 
   componentDidUpdate() {
@@ -50,34 +50,30 @@ export default class AuthorizationPopup extends React.Component {
     } = this.props
     let definitions = authSelectors.shownDefinitions()
     let authorized = authSelectors.authorized()
+
     let Auths = getComponent("auths")
 
-    let { selectedDefinition } = this.state
+    let { selectedDefinitionOption } = this.state
     let errors = errSelectors
       .allErrors()
       .filter((err) => err.get("authId") === "SamlAuth")
     let hasErrors = errors.size > 0
     let isAuthenticated = authorized.size > 0
     let authenticatedKey = authorized.keySeq().first()
-    let selectedIndex =
-      definitions &&
-      definitions.findIndex((definition) => !!definition.get(authenticatedKey))
-    selectedDefinition =
-      isAuthenticated && selectedIndex > -1
-        ? selectedIndex
-        : selectedDefinition
+
+    let selectedDefinitionKey = isAuthenticated ? authenticatedKey : selectedDefinitionOption
 
     let loginDisclaimer = specSelectors.spec().get("loginDisclaimer")
 
     let isSamlAuthenticating =
       samlAuthSelectors.samlAuthState() === "SAML_AUTH_STATE_LOGGING_IN"
     let showLoginOptions =
-      !hasErrors && !isSamlAuthenticating && selectedDefinition === null
+      !hasErrors && !isSamlAuthenticating && !selectedDefinitionKey
     let showLoginStep =
       !hasErrors &&
       !isSamlAuthenticating &&
       definitions &&
-      selectedDefinition !== null
+      !!selectedDefinitionKey
 
     return (
       <div className="dialog-ux">
@@ -118,7 +114,7 @@ export default class AuthorizationPopup extends React.Component {
                   definitions
                     .filter((definition) => {
                       const [key] = definition.keys()
-                      return key === selectedDefinition
+                      return key === selectedDefinitionKey
                     })
                     .map((definition, key) => {
                       return (

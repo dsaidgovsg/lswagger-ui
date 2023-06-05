@@ -71,7 +71,7 @@ export default class OtpJwtAuth extends React.Component {
 
     let authorizedAuth = authSelectors.authorized()
     let isAuthorized = !!authorizedAuth.get(name)
-    let isOtpSent = !!authorizedAuth.get("otpSent")
+    let isOtpSent = !!authSelectors.otpSent()
     let errors = errSelectors.allErrors().filter( err => err.get("authId") === name)
 
     return (
