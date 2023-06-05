@@ -1,6 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import DefinitionSelect from "./DefinitionSelect"
+import {SAML_AUTH_STATE_LOGGED_IN} from "../actions"
 
 export default class AuthorizationPopup extends React.Component {
   constructor(props) {
@@ -29,7 +30,7 @@ export default class AuthorizationPopup extends React.Component {
     const { samlAuthSelectors } = this.props
     let isSamlAuthenticated =
       samlAuthSelectors.samlAuthState() ===
-      "SAML_AUTH_STATE_LOGGED_IN"
+      SAML_AUTH_STATE_LOGGED_IN
     if (isSamlAuthenticated) {
       // unset url search
       this.close()
