@@ -75,10 +75,10 @@ export default class OtpJwtAuth extends React.Component {
     let errors = errSelectors.allErrors().filter( err => err.get("authId") === name)
 
     return (
-      <div>
-        <Row>
+      <div className="otp-form">
+        <Row className="field">
           <label htmlFor="jwt_email">Email:</label>
-          <Col>
+          <Col className="input-group">
             <Input id="jwt_email"
                    type="email"
                    value={this.state.email}
@@ -88,9 +88,9 @@ export default class OtpJwtAuth extends React.Component {
                    disabled={ isAuthorized } />
           </Col>
         </Row>
-        <Row>
+        <Row className="field">
           <label htmlFor="jwt_otp">OTP:</label>
-          <Col>
+          <Col className="input-group">
             <Input id="jwt_otp"
                    type="text"
                    value={this.state.otp}

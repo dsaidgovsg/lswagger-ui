@@ -29,7 +29,7 @@ export default class DefinitionSelect extends React.Component {
           const schema = definition.first()
           return (
             <Button
-              className="btn definition-option__btn"
+              className="btn definition-option-btn"
               role="button"
               key={key}
               onClick={this.handleSelect(key)}
