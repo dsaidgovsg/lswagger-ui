@@ -46,23 +46,21 @@ export class SamlAuth extends React.Component {
     const Button = getComponent("Button")
 
     return (
-      <div>
-        <Row>
-          {!isAuthenticated ? (
-            "Redirecting to SSO login..."
-          ) : (
-            <div>
-              <strong>SAML Login</strong>
-              <Button
-                className="btn modal-btn auth authorize"
-                onClick={this.handleLogoutClick}
-              >
-                Logout
-              </Button>
-            </div>
-          )}
-        </Row>
-      </div>
+      <Row className="saml-auth">
+        {!isAuthenticated ? (
+          <p>Redirecting to SSO login...</p>
+        ) : (
+          <div className="saml-logout-form">
+            <strong>SAML Auth</strong>
+            <Button
+              className="btn modal-btn auth authorize"
+              onClick={this.handleLogoutClick}
+            >
+              Logout
+            </Button>
+          </div>
+        )}
+      </Row>
     )
   }
 }
