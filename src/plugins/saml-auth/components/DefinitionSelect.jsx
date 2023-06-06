@@ -23,7 +23,7 @@ export default class DefinitionSelect extends React.Component {
     if (!definitions) return null
 
     return (
-      <div>
+      <div className="definition-select">
         {definitions.map((definition) => {
           const [key] = definition.keys()
           const schema = definition.first()

@@ -61,11 +61,12 @@ const samlAuthPlugin = () => {
                     schema.get("samlTokenName")
                   )
                   if (samlToken) {
+                    const { authSelectors, authActions, samlAuthActions } = system
                     const authorizableDefinitions =
-                      system.authSelectors.definitionsToAuthorize()
+                      authSelectors.definitionsToAuthorize()
 
-                    system.authActions.showDefinitions(authorizableDefinitions)
-                    system.samlAuthActions.authenticateWithSAMLToken(
+                    authActions.showDefinitions(authorizableDefinitions)
+                    samlAuthActions.authenticateWithSAMLToken(
                       schema,
                       samlToken
                     )

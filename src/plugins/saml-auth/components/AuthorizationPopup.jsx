@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import DefinitionSelect from "./DefinitionSelect"
-import {SAML_AUTH_STATE_LOGGED_IN} from "../actions"
+import { SAML_AUTH_STATE_LOGGED_IN, SAML_AUTH_STATE_LOGGING_IN, SAML_AUTH_STATE_FAILED } from "../actions"
 
 export default class AuthorizationPopup extends React.Component {
   constructor(props) {
@@ -12,13 +12,16 @@ export default class AuthorizationPopup extends React.Component {
   }
 
   close = () => {
-    let { authActions, errActions } = this.props
+    const { authActions, errActions } = this.props
 
-    errActions.clear({ authId: "SamlAuth" })
+    errActions.clear({ type: "auth" })
     authActions.showDefinitions(false)
   };
 
   onSelectDefinition = (definition) => {
+    const { errActions } = this.props
+
+    errActions.clear({ type: "auth" })
     this.setState({ selectedDefinitionOption: definition })
   };
 
@@ -28,12 +31,15 @@ export default class AuthorizationPopup extends React.Component {
 
   componentDidUpdate() {
     const { samlAuthSelectors } = this.props
-    let isSamlAuthenticated =
+    const isSamlAuthenticated =
       samlAuthSelectors.samlAuthState() ===
       SAML_AUTH_STATE_LOGGED_IN
+    const isSamlFailed = samlAuthSelectors.samlAuthState() === SAML_AUTH_STATE_FAILED
     if (isSamlAuthenticated) {
       // unset url search
       this.close()
+      window.history.pushState({}, document.title, window.location.pathname)
+    } else if(isSamlFailed) {
       window.history.pushState({}, document.title, window.location.pathname)
     }
   }
@@ -53,6 +59,7 @@ export default class AuthorizationPopup extends React.Component {
     let authorized = authSelectors.authorized()
 
     let Auths = getComponent("auths")
+    let loginDisclaimer = specSelectors.spec().get("loginDisclaimer")
 
     let { selectedDefinitionOption } = this.state
     let errors = errSelectors
@@ -61,17 +68,13 @@ export default class AuthorizationPopup extends React.Component {
     let hasErrors = errors.size > 0
     let isAuthenticated = authorized.size > 0
     let authenticatedKey = authorized.keySeq().first()
-
     let selectedDefinitionKey = isAuthenticated ? authenticatedKey : selectedDefinitionOption
 
-    let loginDisclaimer = specSelectors.spec().get("loginDisclaimer")
 
     let isSamlAuthenticating =
-      samlAuthSelectors.samlAuthState() === "SAML_AUTH_STATE_LOGGING_IN"
-    let showLoginOptions =
-      !hasErrors && !isSamlAuthenticating && !selectedDefinitionKey
+      samlAuthSelectors.samlAuthState() === SAML_AUTH_STATE_LOGGING_IN
+    let showLoginOptions = !isSamlAuthenticating && !selectedDefinitionKey
     let showLoginStep =
-      !hasErrors &&
       !isSamlAuthenticating &&
       definitions &&
       !!selectedDefinitionKey
@@ -95,14 +98,9 @@ export default class AuthorizationPopup extends React.Component {
                 </button>
               </div>
               <div className="modal-ux-content">
-                {hasErrors &&
-                  errors.map((error) => (
-                    <div key={""} className="errors-wrapper">
-                      {error.get("message")}
-                    </div>
-                  ))}
+
                 {isSamlAuthenticating && (
-                  <div className="error">Authenticating...</div>
+                  <div className="saml-auth-info">Authenticating SAML Token...</div>
                 )}
                 {showLoginOptions && (
                   <DefinitionSelect
@@ -111,6 +109,12 @@ export default class AuthorizationPopup extends React.Component {
                     getComponent={getComponent}
                   />
                 )}
+                {hasErrors &&
+                  errors.map((error) => (
+                    <div key={""} className="login-error">
+                      {error.get("message")}
+                    </div>
+                  ))}
                 {showLoginStep &&
                   definitions
                     .filter((definition) => {
@@ -132,7 +136,8 @@ export default class AuthorizationPopup extends React.Component {
                         />
                       )
                     })}
-                    <div className="login-disclaimer">{loginDisclaimer}</div>
+                    <div className="login-disclaimer-spacer"></div>
+                    <p className="login-disclaimer">{loginDisclaimer}</p>
               </div>
             </div>
           </div>

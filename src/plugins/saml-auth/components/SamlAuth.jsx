@@ -48,7 +48,7 @@ export class SamlAuth extends React.Component {
     return (
       <Row className="saml-auth">
         {!isAuthenticated ? (
-          <p>Redirecting to SSO login...</p>
+          <div className="saml-auth-info">Redirecting to SSO login...</div>
         ) : (
           <div className="saml-logout-form">
             <strong>SAML Auth</strong>
