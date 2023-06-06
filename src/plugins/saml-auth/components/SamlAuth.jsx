@@ -18,7 +18,7 @@ export class SamlAuth extends React.Component {
   }
 
   componentDidMount() {
-    const { authSelectors, schema, name } = this.props
+    const { authSelectors, samlAuthActions, schema, name } = this.props
 
     const authorized = authSelectors.authorized()
     const isAuthenticated = authorized && authorized.get(name)
@@ -26,10 +26,7 @@ export class SamlAuth extends React.Component {
     const disabled = authorized.size > 0 && !isAuthenticated
 
     if (!isAuthenticated && !disabled) {
-      const loginUrl = schema.get("loginUrl")
-      const loginQuery = schema.get("loginQuery")
-      // redirect to loginUrl
-      window.location.href = loginUrl + "?" + new URLSearchParams(loginQuery.toJS())
+      samlAuthActions.loginSAML(name, schema)
     }
   }
 

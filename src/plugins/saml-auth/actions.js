@@ -142,8 +142,23 @@ export const authenticateWithSAMLToken = (schema, samlToken) => async ( { fn, sa
   samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGED_IN)
 }
 
+export const loginSAML = (name, schema) => async ( { authActions } ) => {
+  const loginUrl = schema.get("loginUrl")
+  const loginQuery = schema.get("loginQuery")
+
+  if(!loginUrl) authActions.newAuthErr({
+    authId: name,
+    level: "error",
+    source: "auth",
+    message: "Swagger Config: Login URL not found"
+  })
+
+  window.location.href = `${loginUrl}?${new URLSearchParams(loginQuery.toJS())}`
+}
+
 export const logoutSAML = (name, schema) => async ( { authActions, samlAuthSelectors } ) => {
   const logoutUrl = schema.get("logoutUrl")
+  const logoutQuery = schema.get("logoutQuery")
 
   if(!logoutUrl) authActions.newAuthErr({
     authId: name,
@@ -154,6 +169,6 @@ export const logoutSAML = (name, schema) => async ( { authActions, samlAuthSelec
 
   const email = samlAuthSelectors.samlAuthEmail()
 
-  window.location.href = `${logoutUrl}?email=${email}`
+  window.location.href = `${logoutUrl}?${new URLSearchParams({ ...logoutQuery.toJS(), email})}`
   authActions.logout([name])
 }
