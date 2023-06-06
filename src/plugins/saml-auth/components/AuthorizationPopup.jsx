@@ -136,8 +136,8 @@ export default class AuthorizationPopup extends React.Component {
                         />
                       )
                     })}
-                    <div className="login-disclaimer-spacer"></div>
-                    <p className="login-disclaimer">{loginDisclaimer}</p>
+                <div className="login-disclaimer-spacer"></div>
+                <p className="login-disclaimer">{loginDisclaimer}</p>
               </div>
             </div>
           </div>
