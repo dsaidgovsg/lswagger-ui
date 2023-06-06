@@ -77,7 +77,7 @@ export default class OtpJwtAuth extends React.Component {
     return (
       <div className="otp-form">
         <Row className="field">
-          <label htmlFor="jwt_email">Email:</label>
+          <label htmlFor="jwt_email">Email</label>
           <Col className="input-group">
             <Input id="jwt_email"
                    type="email"
@@ -89,7 +89,7 @@ export default class OtpJwtAuth extends React.Component {
           </Col>
         </Row>
         <Row className="field">
-          <label htmlFor="jwt_otp">OTP:</label>
+          <label htmlFor="jwt_otp">OTP</label>
           <Col className="input-group">
             <Input id="jwt_otp"
                    type="text"
