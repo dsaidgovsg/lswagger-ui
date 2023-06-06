@@ -102,14 +102,14 @@ export const authenticateWithSAMLToken = (schema, samlToken) => async ( { fn, sa
   if(fetchErr) {
     const unauthorizedError = new Error(fetchErr)
     unauthorizedError.message = fetchErr.response
-      ? "Unauthorized. " + fetchErr.response.body.message
-      : "Unauthorized. " + fetchErr.message
+      ? fetchErr.response.body.message
+      : fetchErr.message
 
     errActions.newAuthErr({
       authId,
       level: "",
       source: "auth",
-      message: `Server Error: ${unauthorizedError.message}`
+      message: `Error logging in. ${unauthorizedError.message}`
     })
     samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_FAILED)
     throw unauthorizedError
