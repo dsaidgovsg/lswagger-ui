@@ -59,6 +59,7 @@ export default class OtpJwtAuth extends React.Component {
     this.setState({ email: "", otp: ""})
     errActions.clear({ authId: name })
     authActions.logout([ name ])
+    authActions.showDefinitions(false)
   }
 
   render() {
