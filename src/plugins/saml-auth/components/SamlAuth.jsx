@@ -51,7 +51,6 @@ export class SamlAuth extends React.Component {
           <div className="saml-auth-info">Redirecting to SSO login...</div>
         ) : (
           <div className="field">
-            <label>SAML Auth</label>
             <div className="input-group">
             <Button
               className="btn modal-btn auth authorize"

@@ -75,30 +75,34 @@ export default class OtpJwtAuth extends React.Component {
 
     return (
       <div className="otp-form">
-        <Row className="field">
-          <label htmlFor="jwt_email">Email</label>
-          <Col className="input-group">
-            <Input id="jwt_email"
-                   type="email"
-                   value={this.state.email}
-                   required="required"
-                   data-name="email"
-                   onChange={ this.onChange }
-                   disabled={ isAuthorized } />
-          </Col>
-        </Row>
-        <Row className="field">
-          <label htmlFor="jwt_otp">OTP</label>
-          <Col className="input-group">
-            <Input id="jwt_otp"
-                   type="text"
-                   value={this.state.otp}
-                   required="required"
-                   data-name="otp"
-                   onChange={ this.onChange }
-                   disabled={ isAuthorized } />
-          </Col>
-        </Row>
+        {!isAuthorized &&
+          <div>
+            <Row className="field">
+              <label htmlFor="jwt_email">Email</label>
+              <Col className="input-group">
+                <Input id="jwt_email"
+                      type="email"
+                      value={this.state.email}
+                      required="required"
+                      data-name="email"
+                      onChange={ this.onChange }
+                      disabled={ isAuthorized } />
+              </Col>
+            </Row>
+            <Row className="field">
+              <label htmlFor="jwt_otp">OTP</label>
+              <Col className="input-group">
+                <Input id="jwt_otp"
+                      type="text"
+                      value={this.state.otp}
+                      required="required"
+                      data-name="otp"
+                      onChange={ this.onChange }
+                      disabled={ isAuthorized } />
+              </Col>
+            </Row>
+          </div>
+        }
         <div className="auth-btn-wrapper">
         { isAuthorized ? <Button className="btn modal-btn auth authorize" onClick={ this.logout }>Logout</Button>
                        : <div>
