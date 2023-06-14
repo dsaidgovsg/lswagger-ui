@@ -380,6 +380,7 @@ export const authorizeOtpToken = ( auth ) => ( { fn, authActions, errActions } )
     auth.token = response_data.token
     auth.email = email
     authActions.authorize({ auth })
+    authActions.showDefinitions(false)
   })
   .catch(e => {
     let err = new Error(e)
