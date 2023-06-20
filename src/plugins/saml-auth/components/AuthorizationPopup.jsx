@@ -70,7 +70,6 @@ export default class AuthorizationPopup extends React.Component {
     let authenticatedKey = authorized.keySeq().first()
     let selectedDefinitionKey = isAuthenticated ? authenticatedKey : selectedDefinitionOption
 
-
     let isSamlAuthenticating =
       samlAuthSelectors.samlAuthState() === SAML_AUTH_STATE_LOGGING_IN
     let showLoginOptions = !isSamlAuthenticating && !selectedDefinitionKey

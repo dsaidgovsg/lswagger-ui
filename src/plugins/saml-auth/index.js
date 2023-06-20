@@ -66,7 +66,7 @@ const samlAuthPlugin = () => {
                       authSelectors.definitionsToAuthorize()
 
                     authActions.showDefinitions(authorizableDefinitions)
-                    samlAuthActions.authenticateWithSAMLToken(
+                    samlAuthActions.authenticateWithSamlToken(
                       schema,
                       samlToken
                     )

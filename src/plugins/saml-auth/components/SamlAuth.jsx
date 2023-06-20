@@ -26,14 +26,14 @@ export class SamlAuth extends React.Component {
     const disabled = authorized.size > 0 && !isAuthenticated
 
     if (!isAuthenticated && !disabled) {
-      samlAuthActions.loginSAML(name, schema)
+      samlAuthActions.loginSaml(name, schema)
     }
   }
 
   // hide when it's authorized by other method
   handleLogoutClick = () => {
     const { samlAuthActions, schema, name } = this.props
-    samlAuthActions.logoutSAML(name, schema)
+    samlAuthActions.logoutSaml(name, schema)
   };
 
   render() {

@@ -24,7 +24,7 @@ export const saveSamlAuthEmail = (email) => ({
   payload: email
 })
 
-export const decodeJWT = (jwt) => {
+const decodeJWT = (jwt) => {
   try{
     return [jwtDecode(jwt)]
   } catch(e) {
@@ -51,9 +51,8 @@ const parseLoginResponse = (response) => {
   return [data]
 }
 
-
 const authId = "SamlAuth"
-export const authenticateWithSAMLToken = (schema, samlToken) => async ( { fn, samlAuthActions, authActions, errActions } ) => {
+export const authenticateWithSamlToken = (schema, samlToken) => async ( { fn, samlAuthActions, authActions, errActions } ) => {
   samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGING_IN)
 
   const method = schema.get("authMethod") || "post"
@@ -142,7 +141,7 @@ export const authenticateWithSAMLToken = (schema, samlToken) => async ( { fn, sa
   samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGED_IN)
 }
 
-export const loginSAML = (name, schema) => async ( { authActions } ) => {
+export const loginSaml = (name, schema) => async ( { authActions } ) => {
   const loginUrl = schema.get("loginUrl")
   const loginQuery = schema.get("loginQuery")
 
@@ -156,7 +155,7 @@ export const loginSAML = (name, schema) => async ( { authActions } ) => {
   window.location.href = `${loginUrl}?${new URLSearchParams(loginQuery.toJS())}`
 }
 
-export const logoutSAML = (name, schema) => async ( { authActions, samlAuthSelectors } ) => {
+export const logoutSaml = (name, schema) => async ( { authActions, samlAuthSelectors } ) => {
   const logoutUrl = schema.get("logoutUrl")
   const logoutQuery = schema.get("logoutQuery")
 
