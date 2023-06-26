@@ -5,25 +5,16 @@ import * as actions from "./actions"
 import * as selectors from "./selectors"
 import reducers from "./reducers"
 
-const getAuthToken = (search, authTokenSearchName = "token") => {
-  return search
-    .substring(1)
-    .split("&")
-    .reduce((queries, keyValue) => {
-      const [key, value] = keyValue.split("=")
-      return { ...queries, [key]: value }
-    }, {})[authTokenSearchName]
-}
-
-function getSchema(system, key) {
+function getSamlSchema(system) {
   const {
     specSelectors: { specJson },
   } = system
 
   const definitionBase = ["securityDefinitions"]
-  const schema = specJson().getIn([...definitionBase, key])
+  const schemaKey = specJson().getIn([...definitionBase]).findKey((v) => v.get("saml"))
+  const schema = specJson().getIn([...definitionBase, schemaKey])
 
-  return schema
+  return [schemaKey, schema]
 }
 
 let engaged = false
@@ -53,29 +44,41 @@ const samlAuthPlugin = () => {
           updateJsonSpec:
             (ori, system) =>
             (...args) => {
-              if (engaged) {
-                const authorize = () => {
-                  const schema = getSchema(system, "SamlAuth")
-                  const samlToken = getAuthToken(
-                    window.location.search,
-                    schema.get("samlTokenName")
-                  )
-                  if (samlToken) {
-                    const { authSelectors, authActions, samlAuthActions } = system
-                    const authorizableDefinitions =
-                      authSelectors.definitionsToAuthorize()
+              if (!engaged) return ori(...args)
 
-                    authActions.showDefinitions(authorizableDefinitions)
-                    samlAuthActions.authenticateWithSamlToken(
-                      schema,
-                      samlToken
-                    )
-                  }
+              const authorize = () => {
+                // NOTE hardcode authId
+                const [authId, schema] = getSamlSchema(system)
+
+                const urlParams = new URLSearchParams(window.location.search)
+                const samlToken = urlParams.get(schema.get("samlTokenName") || "SAMLToken")
+                const samlError = urlParams.get(schema.get("samlErrorName") || "SAMLError")
+
+                if (!samlToken && !samlError) return // guard
+
+                const { authSelectors, authActions, errActions, samlAuthActions } = system
+                const authorizableDefinitions =authSelectors.definitionsToAuthorize()
+
+                if(samlError) {
+                  authActions.showDefinitions(authorizableDefinitions)
+                  samlAuthActions.setSamlAuthState(actions.SAML_AUTH_STATE_FAILED)
+                  errActions.newAuthErr({
+                    authId,
+                    level: "",
+                    source: "auth",
+                    message: samlError
+                  })
                 }
-                setTimeout(authorize, 0)
-                engaged = false
+                else if (samlToken) {
+                  authActions.showDefinitions(authorizableDefinitions)
+                  samlAuthActions.authenticateWithSamlToken(
+                    schema,
+                    samlToken
+                  )
+                }
               }
-
+              setTimeout(authorize, 0)
+              engaged = false
               return ori(...args)
             },
         },
