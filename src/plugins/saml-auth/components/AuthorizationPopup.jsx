@@ -25,10 +25,6 @@ export default class AuthorizationPopup extends React.Component {
     this.setState({ selectedDefinitionOption: definition })
   };
 
-  onClearSelectDefinition = () => {
-    this.setState({ selectedDefinitionOption: null })
-  };
-
   componentDidUpdate() {
     const { samlAuthSelectors } = this.props
     const isSamlAuthenticated =
