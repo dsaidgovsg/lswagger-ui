@@ -49,15 +49,11 @@ export default class Auths extends React.Component {
     const BasicJwtAuth = getComponent("basicJwtAuth", true)
     const OtpJwtAuth = getComponent("otpJwtAuth", true)
     const Oauth2 = getComponent("oauth2", true)
-    // const Button = getComponent("Button")
 
     let authorized = authSelectors.authorized()
 
-    // let authorizedAuth = definitions.filter( (definition, key) => {
-    //   return !!authorized.get(key)
-    // })
-
-    let nonOauthDefinitions = definitions.filter( schema => schema.get("type") !== "oauth2" && !(schema.get("type") === "apiKey" && schema.get("tokenUrl")))
+    let nonOauthDefinitions = definitions.filter( schema => schema.get("type") !== "oauth2" && !(schema.get("type") === "apiKey"
+    ))
     let oauthDefinitions = definitions.filter( schema => schema.get("type") === "oauth2")
     let basicJwtDefinitions = definitions.filter( schema => schema.get("type") === "apiKey" && schema.get("tokenUrl") && !schema.get("otp"))
     let otpJwtDefinitions = definitions.filter( schema => schema.get("type") === "apiKey" && schema.get("tokenUrl") && schema.get("otp"))
@@ -99,12 +95,6 @@ export default class Auths extends React.Component {
 
               }).toArray()
             }
-            {/* <div className="auth-btn-wrapper">
-              {
-                nonOauthDefinitions.size === authorizedAuth.size ? <Button className="btn modal-btn auth" onClick={ this.logoutClick }>Logout</Button>
-              : <Button type="submit" className="btn modal-btn auth authorize">Authorize</Button>
-              }
-            </div> */}
           </form>
         }
 
