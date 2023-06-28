@@ -70,7 +70,7 @@ export const authenticateWithSamlToken = (schema, samlToken) => async ( { fn, sa
   const body = JSON.stringify({ email: decoded.sub, saml_token: samlToken })
 
   const headers = {
-    "Accept":"application/json, text/plain, */*",
+    "Accept":"application/json",
     "Content-Type": "application/json"
   }
 
