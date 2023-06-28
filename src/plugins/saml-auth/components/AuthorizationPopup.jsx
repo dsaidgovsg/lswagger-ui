@@ -105,8 +105,8 @@ export default class AuthorizationPopup extends React.Component {
                   />
                 )}
                 {hasErrors &&
-                  errors.map((error) => (
-                    <div key={""} className="login-error">
+                  errors.map((error, index) => (
+                    <div key={index} className="login-error">
                       {error.get("message")}
                     </div>
                   ))}
