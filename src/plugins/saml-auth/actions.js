@@ -8,19 +8,19 @@ const appendQuery = (url, query) => {
   return url
 }
 
-export const SET_SAML_AUTH_STATE_ACTION = "SET_SAML_TOKEN_STATE_ACTION"
+export const SET_SAML_AUTH_STATE = "SET_SAML_TOKEN_STATE"
 export const SAML_AUTH_STATE_LOGGING_IN = "SAML_AUTH_STATE_LOGGING_IN"
 export const SAML_AUTH_STATE_LOGGED_IN = "SAML_AUTH_STATE_LOGGED_IN"
 export const SAML_AUTH_STATE_FAILED = "SAML_AUTH_STATE_FAILED"
-export const SAVE_SAML_AUTH_EMAIL = "SAVE_SAML_AUTH_EMAIL"
+export const SET_SAML_AUTH_EMAIL = "SAVE_SAML_AUTH_EMAIL"
 
 export const setSamlAuthState = (state) => ({
-  type: SET_SAML_AUTH_STATE_ACTION,
+  type: SET_SAML_AUTH_STATE,
   payload: state
 })
 
-export const saveSamlAuthEmail = (email) => ({
-  type: SAVE_SAML_AUTH_EMAIL,
+export const setSamlAuthEmail = (email) => ({
+  type: SET_SAML_AUTH_EMAIL,
   payload: email
 })
 
