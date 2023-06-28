@@ -4,6 +4,18 @@ import DefinitionSelect from "./DefinitionSelect"
 import { SAML_AUTH_STATE_LOGGED_IN, SAML_AUTH_STATE_LOGGING_IN, SAML_AUTH_STATE_FAILED } from "../actions"
 
 export default class AuthorizationPopup extends React.Component {
+  static propTypes = {
+    fn: PropTypes.object.isRequired,
+    getComponent: PropTypes.func.isRequired,
+    authSelectors: PropTypes.object.isRequired,
+    specSelectors: PropTypes.object.isRequired,
+    errSelectors: PropTypes.object.isRequired,
+    authActions: PropTypes.object.isRequired,
+    errActions: PropTypes.object.isRequired,
+    samlAuthSelectors: PropTypes.object.isRequired,
+    getSystem: PropTypes.func.isRequired,
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -69,7 +81,7 @@ export default class AuthorizationPopup extends React.Component {
     let isSamlAuthenticating =
       samlAuthSelectors.samlAuthState() === SAML_AUTH_STATE_LOGGING_IN
     let showLoginOptions = !isSamlAuthenticating && !selectedDefinitionKey
-    let showLoginStep =
+    let showLoginAuth =
       !isSamlAuthenticating &&
       definitions &&
       !!selectedDefinitionKey
@@ -110,7 +122,7 @@ export default class AuthorizationPopup extends React.Component {
                       {error.get("message")}
                     </div>
                   ))}
-                {showLoginStep &&
+                {showLoginAuth &&
                   definitions
                     .filter((definition) => {
                       const [authId] = definition.keys()
@@ -140,16 +152,4 @@ export default class AuthorizationPopup extends React.Component {
       </div>
     )
   }
-
-  static propTypes = {
-    fn: PropTypes.object.isRequired,
-    getComponent: PropTypes.func.isRequired,
-    authSelectors: PropTypes.object.isRequired,
-    specSelectors: PropTypes.object.isRequired,
-    errSelectors: PropTypes.object.isRequired,
-    authActions: PropTypes.object.isRequired,
-    errActions: PropTypes.object.isRequired,
-    samlAuthSelectors: PropTypes.object.isRequired,
-    getSystem: PropTypes.func.isRequired,
-  };
 }
