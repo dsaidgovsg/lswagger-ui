@@ -25,17 +25,17 @@ export default class DefinitionSelect extends React.Component {
     return (
       <div className="definition-select">
         {definitions.map((definition) => {
-          const [key] = definition.keys()
+          const [authId] = definition.keys()
           const schema = definition.first()
           return (
             <Button
               className="btn definition-option-btn"
               role="button"
-              key={key}
-              onClick={this.handleSelect(key)}
+              key={authId}
+              onClick={this.handleSelect(authId)}
             >
-              <strong>{schema.get("title") || key + ".title"}</strong>
-              <p>{schema.get("description") || key + ".description"}</p>
+              <strong>{schema.get("title") || authId + ".title"}</strong>
+              <p>{schema.get("description") || authId + ".description"}</p>
             </Button>
           )
         })}
