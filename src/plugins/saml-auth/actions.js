@@ -136,27 +136,12 @@ export const loginSaml = (name, schema) => async ( { authActions } ) => {
   const loginUrl = schema.get("loginUrl")
   const loginQuery = schema.get("loginQuery")
 
-  if(!loginUrl) authActions.newAuthErr({
-    authId: name,
-    level: "error",
-    source: "auth",
-    message: "Swagger Config: Login URL not found"
-  })
-
   window.location.href = `${loginUrl}?${new URLSearchParams(loginQuery.toJS())}`
 }
 
 export const logoutSaml = (name, schema) => async ( { authActions, samlAuthSelectors } ) => {
   const logoutUrl = schema.get("logoutUrl")
   const logoutQuery = schema.get("logoutQuery")
-
-  if(!logoutUrl) authActions.newAuthErr({
-    authId: name,
-    level: "error",
-    source: "auth",
-    message: "Swagger Config: Logout URL not found"
-  })
-
   const email = samlAuthSelectors.samlAuthEmail()
 
   window.location.href = `${logoutUrl}?${new URLSearchParams({ ...logoutQuery.toJS(), email})}`
