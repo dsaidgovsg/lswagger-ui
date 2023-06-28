@@ -6,7 +6,7 @@ export const SET_SAML_AUTH_STATE = "SET_SAML_TOKEN_STATE"
 export const SAML_AUTH_STATE_LOGGING_IN = "SAML_AUTH_STATE_LOGGING_IN"
 export const SAML_AUTH_STATE_LOGGED_IN = "SAML_AUTH_STATE_LOGGED_IN"
 export const SAML_AUTH_STATE_FAILED = "SAML_AUTH_STATE_FAILED"
-export const SET_SAML_AUTH_EMAIL = "SAVE_SAML_AUTH_EMAIL"
+export const SET_SAML_AUTH_EMAIL = "SET_SAML_AUTH_EMAIL"
 
 export const setSamlAuthState = (state) => ({
   type: SET_SAML_AUTH_STATE,
@@ -126,7 +126,7 @@ export const authenticateWithSamlToken = (schema, samlToken) => async ( { fn, sa
       schema
     }
   })
-  samlAuthActions.saveSamlAuthEmail(decoded.sub)
+  samlAuthActions.setSamlAuthEmail(decoded.sub)
   samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGED_IN)
 }
 
