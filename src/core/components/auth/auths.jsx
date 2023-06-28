@@ -46,17 +46,15 @@ export default class Auths extends React.Component {
     let { definitions, getComponent, authSelectors, errSelectors, getSystem } = this.props
     const ApiKeyAuth = getComponent("apiKeyAuth")
     const BasicAuth = getComponent("basicAuth")
-    const BasicJwtAuth = getComponent("basicJwtAuth", true)
     const OtpJwtAuth = getComponent("otpJwtAuth", true)
     const Oauth2 = getComponent("oauth2", true)
 
     let authorized = authSelectors.authorized()
 
-    let nonOauthDefinitions = definitions.filter( schema => schema.get("type") !== "oauth2" && !(schema.get("type") === "apiKey"
-    ))
+    let isOtpAuthDefinition = (schema) => schema.get("type") === "apiKey" && schema.get("tokenUrl") && schema.get("otp")
+    let nonOauthDefinitions = definitions.filter( schema => schema.get("type") !== "oauth2" && !isOtpAuthDefinition(schema))
     let oauthDefinitions = definitions.filter( schema => schema.get("type") === "oauth2")
-    let basicJwtDefinitions = definitions.filter( schema => schema.get("type") === "apiKey" && schema.get("tokenUrl") && !schema.get("otp"))
-    let otpJwtDefinitions = definitions.filter( schema => schema.get("type") === "apiKey" && schema.get("tokenUrl") && schema.get("otp"))
+    let otpJwtDefinitions = definitions.filter(isOtpAuthDefinition)
 
     return (
       <div className="auth-container">
@@ -110,21 +108,6 @@ export default class Auths extends React.Component {
                     <Oauth2 authorized={ authorized }
                             schema={ schema }
                             name={ name } />
-                  </div>)
-                }
-                ).toArray()
-            }
-          </div> : null
-        }
-
-        {
-          basicJwtDefinitions && basicJwtDefinitions.size ? <div>
-            {
-              basicJwtDefinitions.map( (schema, name) =>{
-                  return (<div key={ name }>
-                    <BasicJwtAuth authorized={ authorized }
-                                  schema={ schema }
-                                  name={ name } />
                   </div>)
                 }
                 ).toArray()
