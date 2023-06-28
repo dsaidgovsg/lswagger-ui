@@ -1,12 +1,6 @@
 import jwtDecode from "jwt-decode"
 import { Map } from "immutable"
-
-const appendQuery = (url, query) => {
-  if (query) {
-    url = `${url}?${new URLSearchParams(query)}`
-  }
-  return url
-}
+import urljoin from "url-join"
 
 export const SET_SAML_AUTH_STATE = "SET_SAML_TOKEN_STATE"
 export const SAML_AUTH_STATE_LOGGING_IN = "SAML_AUTH_STATE_LOGGING_IN"
@@ -55,10 +49,8 @@ const authId = "SamlAuth"
 export const authenticateWithSamlToken = (schema, samlToken) => async ( { fn, samlAuthActions, authActions, errActions } ) => {
   samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGING_IN)
 
-  const authQuery = schema.get("authQuery")
-  const query = authQuery && authQuery.toJS()
-
-  const fetchUrl = appendQuery(schema.get("authTokenUrl"), query)
+  const query = `?service=${schema.get("service")}&expiry=${schema.get("tokenExpiry")}`
+  const fetchUrl = urljoin(schema.get("tokenUrl"), "/tokens", query)
 
   // 1. decode jwt
   const [decoded, decodeErr] = decodeJWT(samlToken)
