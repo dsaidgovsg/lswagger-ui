@@ -67,9 +67,7 @@ export const authenticateWithSamlToken = (schema, samlToken) => async ( { fn, sa
   }
 
   // 2. send request
-  const authBody = schema.get("authBody") || new Map()
-  const extraBody = authBody.toJS()
-  const body = JSON.stringify({ email: decoded.sub, saml_token: samlToken, ...extraBody })
+  const body = JSON.stringify({ email: decoded.sub, saml_token: samlToken })
 
   const headers = {
     "Accept":"application/json, text/plain, */*",
