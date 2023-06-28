@@ -113,8 +113,8 @@ export default class AuthorizationPopup extends React.Component {
                 {showLoginStep &&
                   definitions
                     .filter((definition) => {
-                      const [key] = definition.keys()
-                      return key === selectedDefinitionKey
+                      const [authId] = definition.keys()
+                      return authId === selectedDefinitionKey
                     })
                     .map((definition, key) => {
                       return (
