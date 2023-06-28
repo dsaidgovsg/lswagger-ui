@@ -55,7 +55,6 @@ const authId = "SamlAuth"
 export const authenticateWithSamlToken = (schema, samlToken) => async ( { fn, samlAuthActions, authActions, errActions } ) => {
   samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGING_IN)
 
-  const method = schema.get("authMethod") || "post"
   const authQuery = schema.get("authQuery")
   const query = authQuery && authQuery.toJS()
 
@@ -89,9 +88,9 @@ export const authenticateWithSamlToken = (schema, samlToken) => async ( { fn, sa
     try {
       return [await fn.fetch({
         url: fetchUrl,
-        method: method || "post",
+        method: "POST",
         headers,
-        ...(method === "get" || method === "head" ? {} : {body})
+        body
       }), undefined]
     } catch(e) {
       return [undefined, e]
