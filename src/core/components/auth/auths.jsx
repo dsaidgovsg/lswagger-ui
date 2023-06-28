@@ -47,14 +47,17 @@ export default class Auths extends React.Component {
     const ApiKeyAuth = getComponent("apiKeyAuth")
     const BasicAuth = getComponent("basicAuth")
     const OtpJwtAuth = getComponent("otpJwtAuth", true)
+    const SamlAuth = getComponent("samlAuth", true)
     const Oauth2 = getComponent("oauth2", true)
 
     let authorized = authSelectors.authorized()
 
     let isOtpAuthDefinition = (schema) => schema.get("type") === "apiKey" && schema.get("tokenUrl") && schema.get("otp")
-    let nonOauthDefinitions = definitions.filter( schema => schema.get("type") !== "oauth2" && !isOtpAuthDefinition(schema))
+    let isSamlAuthDefinition = (schema) => schema.get("type") === "apiKey" && schema.get("tokenUrl") && schema.get("saml")
+    let nonOauthDefinitions = definitions.filter( schema => schema.get("type") !== "oauth2" && !isOtpAuthDefinition(schema) && !isSamlAuthDefinition(schema))
     let oauthDefinitions = definitions.filter( schema => schema.get("type") === "oauth2")
     let otpJwtDefinitions = definitions.filter(isOtpAuthDefinition)
+    let samlDefinitions = definitions.filter(isSamlAuthDefinition)
 
     return (
       <div className="auth-container">
@@ -123,6 +126,28 @@ export default class Auths extends React.Component {
                     <OtpJwtAuth authorized={ authorized }
                                 schema={ schema }
                                 name={ name } />
+                  </div>)
+                }
+                ).toArray()
+            }
+          </div> : null
+        }
+
+
+        {
+          samlDefinitions && samlDefinitions.size ? <div>
+            {
+              samlDefinitions.map( (schema, name) =>{
+                  return (<div key={ name }>
+                    <SamlAuth
+                      key={name}
+                      schema={schema}
+                      name={name}
+                      authorized={authorized}
+                      getComponent={getComponent}
+                      authSelectors={authSelectors}
+                      samlAuthActions={getSystem().samlAuthActions}
+                    />
                   </div>)
                 }
                 ).toArray()

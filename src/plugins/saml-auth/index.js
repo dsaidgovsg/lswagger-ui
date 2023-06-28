@@ -1,5 +1,4 @@
 import SamlAuth from "./components/SamlAuth"
-import WrappedSamlAuthItem from "./components/WrappedSamlAuthItem"
 import AuthorizationPopup from "./components/AuthorizationPopup"
 import * as actions from "./actions"
 import * as selectors from "./selectors"
@@ -21,8 +20,7 @@ let engaged = false
 const samlAuthPlugin = () => {
   return {
     components: {
-      SamlAuth,
-      apiKeyAuth: WrappedSamlAuthItem,
+      samlAuth: SamlAuth,
       authorizationPopup: AuthorizationPopup
     },
     // authorize on saml response.
