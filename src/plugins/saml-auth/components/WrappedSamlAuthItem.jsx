@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import SamlAuth from "./SamlAuth"
 
-export default class WrappedAuthItem extends React.Component {
+export default class WrappedSamlAuthItem extends React.Component {
   static propTypes = {
     schema: PropTypes.object.isRequired,
     getSystem: PropTypes.func.isRequired,
