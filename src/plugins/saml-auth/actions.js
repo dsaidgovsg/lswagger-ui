@@ -5,16 +5,10 @@ export const SET_SAML_AUTH_STATE = "SET_SAML_TOKEN_STATE"
 export const SAML_AUTH_STATE_LOGGING_IN = "SAML_AUTH_STATE_LOGGING_IN"
 export const SAML_AUTH_STATE_LOGGED_IN = "SAML_AUTH_STATE_LOGGED_IN"
 export const SAML_AUTH_STATE_FAILED = "SAML_AUTH_STATE_FAILED"
-export const SET_SAML_AUTH_EMAIL = "SET_SAML_AUTH_EMAIL"
 
 export const setSamlAuthState = (state) => ({
   type: SET_SAML_AUTH_STATE,
   payload: state
-})
-
-export const setSamlAuthEmail = (email) => ({
-  type: SET_SAML_AUTH_EMAIL,
-  payload: email
 })
 
 const parseFetchResponse = (response) => {
@@ -93,21 +87,20 @@ export const authenticateWithSamlToken = (authId, schema, samlToken) => async ( 
       schema
     }
   })
-  samlAuthActions.setSamlAuthEmail(decoded.sub)
   samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGED_IN)
 }
 
-export const loginSaml = (name, schema) => async () => {
+export const loginSaml = (schema) => async () => {
   const loginUrl = `${schema.get("ssoUrl")}/saml/sso`
   const redirectUrl = encodeURIComponent(window.location.origin)
 
   window.location.href = urljoin(loginUrl, `?RelayState=${redirectUrl}`)
 }
 
-export const logoutSaml = (name, schema) => async ( { authActions, samlAuthSelectors } ) => {
+export const logoutSaml = (name, schema) => async ( { authActions, authSelectors } ) => {
   const logoutUrl = `${schema.get("ssoUrl")}/saml/slo`
   const redirectUrl = encodeURIComponent(window.location.origin)
-  const email = samlAuthSelectors.samlAuthEmail()
+  const email = authSelectors.authorized().get(name).email
 
   window.location.href = urljoin(logoutUrl, `?email=${email}&RelayState=${redirectUrl}`)
   authActions.logout([name])
