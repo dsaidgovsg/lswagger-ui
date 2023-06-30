@@ -9,9 +9,8 @@ function getSamlSchema(system) {
     specSelectors: { specJson },
   } = system
 
-  const definitionBase = ["securityDefinitions"]
-  const schemaKey = specJson().getIn([...definitionBase]).findKey((v) => v.get("saml"))
-  const schema = specJson().getIn([...definitionBase, schemaKey])
+  const schemaKey = specJson().getIn(["securityDefinitions"]).findKey((v) => v.get("saml"))
+  const schema = specJson().getIn(["securityDefinitions", schemaKey])
 
   return [schemaKey, schema]
 }
@@ -42,17 +41,12 @@ const samlAuthPlugin = () => {
           updateJsonSpec:
             (ori, system) =>
             (...args) => {
-              if (!engaged) return ori(...args)
-
               const authorize = () => {
-                // NOTE hardcode authId
                 const [authId, schema] = getSamlSchema(system)
 
                 const urlParams = new URLSearchParams(window.location.search)
-                const samlToken = urlParams.get(schema.get("samlTokenName") || "SAMLToken")
-                const samlError = urlParams.get(schema.get("samlErrorName") || "SAMLError")
-
-                if (!samlToken && !samlError) return // guard
+                const samlToken = urlParams.get(schema.get("SAMLToken"))
+                const samlError = urlParams.get(schema.get("SAMLError"))
 
                 const { authSelectors, authActions, errActions, samlAuthActions } = system
                 const authorizableDefinitions =authSelectors.definitionsToAuthorize()
@@ -70,13 +64,17 @@ const samlAuthPlugin = () => {
                 else if (samlToken) {
                   authActions.showDefinitions(authorizableDefinitions)
                   samlAuthActions.authenticateWithSamlToken(
+                    authId,
                     schema,
                     samlToken
                   )
                 }
               }
-              setTimeout(authorize, 0)
-              engaged = false
+
+              if (engaged) {
+                setTimeout(authorize, 0)
+                engaged = false
+              }
               return ori(...args)
             },
         },
