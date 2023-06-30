@@ -1,5 +1,4 @@
 import jwtDecode from "jwt-decode"
-import { Map } from "immutable"
 import urljoin from "url-join"
 
 export const SET_SAML_AUTH_STATE = "SET_SAML_TOKEN_STATE"
@@ -18,103 +17,71 @@ export const setSamlAuthEmail = (email) => ({
   payload: email
 })
 
-const decodeJWT = (jwt) => {
-  try{
-    return [jwtDecode(jwt)]
-  } catch(e) {
-    return [undefined, e]
-  }
-}
-
-const parseLoginResponse = (response) => {
-
-  let data
-  try{ data = JSON.parse(response.data) }
-  catch(e) { return [undefined, e] }
-
+const parseFetchResponse = (response) => {
+  let data = JSON.parse(response.data)
   const error = data && data.error
   const parseError = data && data.parseError
 
   switch(true) {
     case !response.ok:
-      return [undefined, response.statusText]
+      throw new Error(response.statusText)
     case !!error:
     case !!parseError:
-      return [data, JSON.stringify(data)]
+      throw new Error(JSON.stringify(data))
+    default:
+      return data
   }
-  return [data]
 }
 
-const authId = "SamlAuth"
-export const authenticateWithSamlToken = (schema, samlToken) => async ( { fn, samlAuthActions, authActions, errActions } ) => {
-  samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGING_IN)
-
-  const query = `?service=${schema.get("service")}&expiry=${schema.get("tokenExpiry")}`
-  const fetchUrl = urljoin(schema.get("tokenUrl"), "/tokens", query)
-
-  // 1. decode jwt
-  const [decoded, decodeErr] = decodeJWT(samlToken)
-  // guard error
-  if(decodeErr) {
-    errActions.newAuthErr({
-      authId,
-      level: "",
-      source: "auth",
-      message: `JWT Error: ${decodeErr.message}`
-    })
-    samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_FAILED)
-    throw decodeErr
-  }
-
-  // 2. send request
-  const body = JSON.stringify({ email: decoded.sub, saml_token: samlToken })
-
+const postLogin = async (fn, url, body) => {
   const headers = {
     "Accept":"application/json",
     "Content-Type": "application/json"
   }
+  return await fn.fetch({
+      url: url,
+      method: "POST",
+      headers,
+      body: JSON.stringify(body)
+    })
+}
 
-  let [response, fetchErr] = await (async function request() {
-    try {
-      return [await fn.fetch({
-        url: fetchUrl,
-        method: "POST",
-        headers,
-        body
-      }), undefined]
-    } catch(e) {
-      return [undefined, e]
-    }
-  })()
-  // guard error
-  if(fetchErr) {
-    const unauthorizedError = new Error(fetchErr)
-    unauthorizedError.message = fetchErr.response
-      ? fetchErr.response.body.message
-      : fetchErr.message
+export const authenticateWithSamlToken = (authId, schema, samlToken) => async ( { fn, samlAuthActions, authActions, errActions } ) => {
+  samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGING_IN)
 
+  const query = `?service=${schema.get("service")}&expiry=${schema.get("tokenExpiry")}`
+  const postUrl = urljoin(schema.get("tokenUrl"), "/tokens", query)
+  const propagateAuthError = (errorMessage) => {
     errActions.newAuthErr({
       authId,
       level: "",
       source: "auth",
-      message: `Error logging in. ${unauthorizedError.message}`
+      message: errorMessage
     })
     samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_FAILED)
-    throw unauthorizedError
   }
 
+  // 1. decode jwt
+  let decoded
+  try {
+    decoded = jwtDecode(samlToken)
+  } catch(decodeErr) {
+    propagateAuthError(`SAML token error. ${decodeErr.message}`)
+    return
+  }
 
-  // 3. parse response
-  const [data, parseErrorMessage] = parseLoginResponse(response)
-  if(parseErrorMessage) {
-    errActions.newAuthErr({
-      authId,
-      level: "",
-      source: "auth",
-      message: `Response Error: ${parseErrorMessage}`
-    })
-    samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_FAILED)
-    throw new Error(parseErrorMessage)
+  // 2. send request, parse response
+  let response, data
+  try {
+    response = await postLogin(fn, postUrl, { email: decoded.sub, saml_token: samlToken })
+    data = await parseFetchResponse(response)
+  } catch(e) {
+    const errMessage = e.response
+      ? e.response.body.message // response error
+      : e.message // normal error
+
+    propagateAuthError(`Unauthorized. ${errMessage}`)
+    return
   }
 
   // 4. set auth
@@ -130,18 +97,18 @@ export const authenticateWithSamlToken = (schema, samlToken) => async ( { fn, sa
   samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGED_IN)
 }
 
-export const loginSaml = (name, schema) => async ( { authActions } ) => {
-  const loginUrl = schema.get("loginUrl")
-  const loginQuery = schema.get("loginQuery")
+export const loginSaml = (name, schema) => async () => {
+  const loginUrl = `${schema.get("ssoUrl")}/saml/sso`
+  const redirectUrl = encodeURIComponent(window.location.origin)
 
-  window.location.href = `${loginUrl}?${new URLSearchParams(loginQuery.toJS())}`
+  window.location.href = urljoin(loginUrl, `?RelayState=${redirectUrl}`)
 }
 
 export const logoutSaml = (name, schema) => async ( { authActions, samlAuthSelectors } ) => {
-  const logoutUrl = schema.get("logoutUrl")
-  const logoutQuery = schema.get("logoutQuery")
+  const logoutUrl = `${schema.get("ssoUrl")}/saml/slo`
+  const redirectUrl = encodeURIComponent(window.location.origin)
   const email = samlAuthSelectors.samlAuthEmail()
 
-  window.location.href = `${logoutUrl}?${new URLSearchParams({ ...logoutQuery.toJS(), email})}`
+  window.location.href = urljoin(logoutUrl, `?email=${email}&RelayState=${redirectUrl}`)
   authActions.logout([name])
 }
