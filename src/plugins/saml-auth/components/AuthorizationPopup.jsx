@@ -54,6 +54,7 @@ export default class AuthorizationPopup extends React.Component {
 
   render() {
     let {
+      samlAuthActions,
       samlAuthSelectors,
       authSelectors,
       authActions,
@@ -139,7 +140,7 @@ export default class AuthorizationPopup extends React.Component {
                           authSelectors={authSelectors}
                           authActions={authActions}
                           specSelectors={specSelectors}
-                          getSystem={getSystem}
+                          samlAuthActions={samlAuthActions}
                         />
                       )
                     })}
