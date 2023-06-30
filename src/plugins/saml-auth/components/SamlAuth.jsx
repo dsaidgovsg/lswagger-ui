@@ -25,7 +25,6 @@ export class SamlAuth extends React.Component {
     }
   }
 
-  // hide when it's authorized by other method
   handleLogoutClick = () => {
     const { samlAuthActions, schema, name } = this.props
     samlAuthActions.logoutSaml(name, schema)

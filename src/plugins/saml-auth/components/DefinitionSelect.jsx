@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 
 export default class DefinitionSelect extends React.Component {
   static propTypes = {
-    definitions: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+    definitions: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]).isRequired,
     onSelect: PropTypes.func.isRequired,
     getComponent: PropTypes.func.isRequired,
   };
