@@ -72,8 +72,6 @@ export default class Auths extends React.Component {
                   case "apiKey": authEl = <ApiKeyAuth key={ name }
                                                       schema={ schema }
                                                       name={ name }
-                                                      getSystem={ getSystem }
-                                                      authSelectors={ authSelectors }
                                                       errSelectors={ errSelectors }
                                                       authorized={ authorized }
                                                       getComponent={ getComponent }
