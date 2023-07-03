@@ -45,8 +45,8 @@ const samlAuthPlugin = () => {
                 const [authId, schema] = getSamlSchema(system)
 
                 const urlParams = new URLSearchParams(window.location.search)
-                const samlToken = urlParams.get(schema.get("SAMLToken"))
-                const samlError = urlParams.get(schema.get("SAMLError"))
+                const samlToken = urlParams.get("SAMLToken")
+                const samlError = urlParams.get("SAMLError")
 
                 const { authSelectors, authActions, errActions, samlAuthActions } = system
                 const authorizableDefinitions =authSelectors.definitionsToAuthorize()
