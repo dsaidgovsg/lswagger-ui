@@ -100,7 +100,7 @@ export const loginSaml = (schema) => async () => {
 export const logoutSaml = (name, schema) => async ( { authActions, authSelectors } ) => {
   const logoutUrl = `${schema.get("ssoUrl")}/saml/slo`
   const redirectUrl = encodeURIComponent(window.location.origin)
-  const email = authSelectors.authorized().get(name).email
+  const email = authSelectors.authorized().getIn([name, "email"])
 
   window.location.href = urljoin(logoutUrl, `?email=${email}&RelayState=${redirectUrl}`)
   authActions.logout([name])
