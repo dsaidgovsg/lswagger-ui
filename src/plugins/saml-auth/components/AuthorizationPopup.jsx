@@ -108,7 +108,7 @@ export default class AuthorizationPopup extends React.Component {
               <div className="modal-ux-content">
 
                 {isSamlAuthenticating && (
-                  <div className="saml-auth-info">Authenticating SAML Token...</div>
+                  <div className="loading-container saml-auth-info"><div className="loading"></div></div>
                 )}
                 {showLoginOptions && (
                   <DefinitionSelect
