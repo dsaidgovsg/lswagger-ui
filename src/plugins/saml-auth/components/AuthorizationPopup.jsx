@@ -94,7 +94,7 @@ export default class AuthorizationPopup extends React.Component {
           <div className="modal-dialog-ux">
             <div className="modal-ux-inner">
               <div className="modal-ux-header">
-                <h3>Authorization</h3>
+                <div className="logo"></div>
                 <button
                   type="button"
                   className="close-modal"
