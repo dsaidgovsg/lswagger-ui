@@ -7,7 +7,6 @@ export class SamlAuth extends React.Component {
     authorized: PropTypes.object,
     getComponent: PropTypes.func.isRequired,
     schema: PropTypes.object.isRequired,
-    authSelectors: PropTypes.object.isRequired,
     samlAuthActions: PropTypes.object.isRequired,
   };
 
@@ -16,9 +15,7 @@ export class SamlAuth extends React.Component {
   }
 
   componentDidMount() {
-    const { authSelectors, samlAuthActions, schema } = this.props
-
-    const authorized = authSelectors.authorized()
+    const { authorized, samlAuthActions, schema } = this.props
 
     if (authorized.size === 0) {
       samlAuthActions.loginSaml(schema)
@@ -31,9 +28,7 @@ export class SamlAuth extends React.Component {
   };
 
   render() {
-    const { name, getComponent, authSelectors } = this.props
-
-    const authorized = authSelectors.authorized()
+    const { name, getComponent, authorized } = this.props
 
     const isAuthenticated = authorized && authorized.get(name)
     const Row = getComponent("Row")

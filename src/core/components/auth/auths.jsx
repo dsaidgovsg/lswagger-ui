@@ -143,7 +143,6 @@ export default class Auths extends React.Component {
                       name={name}
                       authorized={authorized}
                       getComponent={getComponent}
-                      authSelectors={authSelectors}
                       samlAuthActions={samlAuthActions}
                     />
                   </div>)
