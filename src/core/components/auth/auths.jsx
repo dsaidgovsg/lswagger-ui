@@ -138,7 +138,6 @@ export default class Auths extends React.Component {
               samlDefinitions.map( (schema, name) =>{
                   return (<div key={ name }>
                     <SamlAuth
-                      key={name}
                       schema={schema}
                       name={name}
                       authorized={authorized}
