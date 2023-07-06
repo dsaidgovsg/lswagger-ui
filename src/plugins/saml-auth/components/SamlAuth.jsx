@@ -15,16 +15,16 @@ export class SamlAuth extends React.Component {
   }
 
   componentDidMount() {
-    const { authorized, samlAuthActions, schema } = this.props
+    const { authorized, samlAuthActions } = this.props
 
     if (authorized.size === 0) {
-      samlAuthActions.loginSaml(schema)
+      samlAuthActions.loginSaml()
     }
   }
 
   handleLogoutClick = () => {
-    const { samlAuthActions, schema, name } = this.props
-    samlAuthActions.logoutSaml(name, schema)
+    const { samlAuthActions, name } = this.props
+    samlAuthActions.logoutSaml(name)
   };
 
   render() {
