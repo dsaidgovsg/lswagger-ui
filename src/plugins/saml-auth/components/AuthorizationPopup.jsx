@@ -142,7 +142,6 @@ export default class AuthorizationPopup extends React.Component {
                         />
                       )
                     })}
-                <div className="login-disclaimer-spacer"></div>
                 <p className="login-disclaimer">
                   This is a Government of Singapore internal system. Unauthorised use is strictly prohibited.
                   If you are not authorised, please exit from the system immediately. The use of this system
