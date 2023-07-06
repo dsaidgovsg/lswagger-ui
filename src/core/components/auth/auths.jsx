@@ -46,6 +46,7 @@ export default class Auths extends React.Component {
     let { definitions, getComponent, authSelectors, errSelectors, samlAuthActions } = this.props
     const ApiKeyAuth = getComponent("apiKeyAuth")
     const BasicAuth = getComponent("basicAuth")
+    const BasicJwtAuth = getComponent("basicJwtAuth", true)
     const OtpJwtAuth = getComponent("otpJwtAuth", true)
     const SamlAuth = getComponent("samlAuth", true)
     const Oauth2 = getComponent("oauth2", true)
@@ -56,6 +57,7 @@ export default class Auths extends React.Component {
     let isSamlAuthDefinition = (schema) => schema.get("type") === "apiKey" && schema.get("tokenUrl") && schema.get("saml")
     let nonOauthDefinitions = definitions.filter( schema => schema.get("type") !== "oauth2" && !isOtpAuthDefinition(schema) && !isSamlAuthDefinition(schema))
     let oauthDefinitions = definitions.filter( schema => schema.get("type") === "oauth2")
+    let basicJwtDefinitions = definitions.filter( schema => schema.get("type") === "apiKey" && schema.get("tokenUrl") && !schema.get("otp") && !schema.get("saml"))
     let otpJwtDefinitions = definitions.filter(isOtpAuthDefinition)
     let samlDefinitions = definitions.filter(isSamlAuthDefinition)
 
@@ -109,6 +111,21 @@ export default class Auths extends React.Component {
                     <Oauth2 authorized={ authorized }
                             schema={ schema }
                             name={ name } />
+                  </div>)
+                }
+                ).toArray()
+            }
+          </div> : null
+        }
+
+        {
+          basicJwtDefinitions && basicJwtDefinitions.size ? <div>
+            {
+              basicJwtDefinitions.map( (schema, name) =>{
+                  return (<div key={ name }>
+                    <BasicJwtAuth authorized={ authorized }
+                                  schema={ schema }
+                                  name={ name } />
                   </div>)
                 }
                 ).toArray()
