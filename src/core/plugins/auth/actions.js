@@ -267,12 +267,12 @@ export const authorizeBasicToken = ( auth ) => ( { fn, authActions, errActions }
   })
 }
 
-export const sendOtp = ( auth ) => ( { fn, authActions, errActions } ) => {
+export const sendOtp = ( auth ) => ( { fn, authActions, errActions, specSelectors } ) => {
   authActions.receiveOtp(false)
 
-  let { schema, name, email } = auth
+  let { name, email } = auth
 
-  let fetchUrl = urljoin(schema.get("tokenUrl"), "/otps")
+  let fetchUrl = urljoin(specSelectors.tokenUrl(), "/otps")
   let body = JSON.stringify({ email })
 
   let headers = {
@@ -327,11 +327,11 @@ export const sendOtp = ( auth ) => ( { fn, authActions, errActions } ) => {
   })
 }
 
-export const exchangeToken = (fn, schema, body) => {
-  const fetchUrl = urljoin(schema.get("tokenUrl"), "/tokens")
+export const exchangeToken = (fn, specSelectors, body) => {
+  const fetchUrl = urljoin(specSelectors.tokenUrl(), "/tokens")
   const query = {
-    service: schema.get("service"),
-    expiry: schema.get("tokenExpiry")
+    service: specSelectors.service(),
+    expiry: specSelectors.tokenExpiry()
   }
   const headers = {
     "Accept": "application/json",
@@ -360,7 +360,7 @@ export const exchangeToken = (fn, schema, body) => {
   })
 }
 
-export const authorizeOtpToken = ( auth ) => ( { fn, authActions, errActions } ) => {
+export const authorizeOtpToken = ( auth ) => ( { fn, authActions, errActions, specSelectors } ) => {
   authActions.receiveOtp(false)
 
   let { schema, name, email, otp } = auth

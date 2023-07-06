@@ -12,7 +12,7 @@ export const setSamlAuthState = (state) => ({
   payload: state
 })
 
-export const authenticateWithSamlToken = (authId, schema, samlToken) => ( { fn, samlAuthActions, authActions, errActions } ) => {
+export const authenticateWithSamlToken = (authId, schema, samlToken) => ( { fn, samlAuthActions, authActions, errActions, specSelectors } ) => {
   samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGING_IN)
 
   const propagateAuthError = (errorMessage) => {
@@ -35,7 +35,7 @@ export const authenticateWithSamlToken = (authId, schema, samlToken) => ( { fn, 
   }
 
   // 2. send request, parse response
-  exchangeToken(fn, schema, { email: decoded.sub, saml_token: samlToken })
+  exchangeToken(fn, specSelectors, { email: decoded.sub, saml_token: samlToken })
   .then((token) => {
     // 3. set auth
     authActions.authorize({
