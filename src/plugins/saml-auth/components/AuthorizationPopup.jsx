@@ -13,7 +13,7 @@ export default class AuthorizationPopup extends React.Component {
     authActions: PropTypes.object.isRequired,
     errActions: PropTypes.object.isRequired,
     samlAuthSelectors: PropTypes.object.isRequired,
-    getSystem: PropTypes.func.isRequired,
+    samlAuthActions: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -61,14 +61,12 @@ export default class AuthorizationPopup extends React.Component {
       getComponent,
       errSelectors,
       specSelectors,
-      getSystem,
       fn: { AST = {} },
     } = this.props
     let definitions = authSelectors.shownDefinitions()
     let authorized = authSelectors.authorized()
 
     let Auths = getComponent("auths")
-    let loginDisclaimer = specSelectors.spec().get("loginDisclaimer")
 
     let { selectedDefinitionOption } = this.state
     let errors = errSelectors
@@ -145,7 +143,11 @@ export default class AuthorizationPopup extends React.Component {
                       )
                     })}
                 <div className="login-disclaimer-spacer"></div>
-                <p className="login-disclaimer">{loginDisclaimer}</p>
+                <p className="login-disclaimer">
+                  This is a Government of Singapore internal system. Unauthorised use is strictly prohibited.
+                  If you are not authorised, please exit from the system immediately. The use of this system
+                  is subject to the Computer Misuse Act.
+                </p>
               </div>
             </div>
           </div>
