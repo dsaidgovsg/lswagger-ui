@@ -1,4 +1,4 @@
-import { SET_SAML_AUTH_STATE, SET_SAML_AUTH_EMAIL } from "./actions"
+import { SET_SAML_AUTH_STATE } from "./actions"
 
 const reducers = {
   [SET_SAML_AUTH_STATE]: (state, { payload }) =>
