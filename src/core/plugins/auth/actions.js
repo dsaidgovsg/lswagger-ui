@@ -256,7 +256,7 @@ export const authorizeBasicToken = ( auth ) => ( { fn, authActions, errActions }
     // workaround for actual error response, e.g. failed authentication, masked
     // by general failed to fetch error due to missing CORS header from rowdy
     // for error responses
-    err.message = 'Unauthorized. Please check your username and password.'
+    err.message = "Unauthorized. Please check your username and password."
 
     errActions.newAuthErr( {
       authId: name,
@@ -322,7 +322,41 @@ export const sendOtp = ( auth ) => ( { fn, authActions, errActions } ) => {
       level: "",
       source: "",
       message: err.message
-    } )
+    })
+
+  })
+}
+
+export const exchangeToken = (fn, schema, body) => {
+  const fetchUrl = urljoin(schema.get("tokenUrl"), "/tokens")
+  const query = {
+    service: schema.get("service"),
+    expiry: schema.get("tokenExpiry")
+  }
+  const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+
+  return fn.fetch({
+    url: fetchUrl,
+    method: "post",
+    headers,
+    query,
+    body
+  }).then((response) => {
+    const data = JSON.parse(response.data)
+    const error = data && ( data.error || "" )
+    let parseError = data && ( data.parseError || "" )
+
+    if ( !response.ok ) {
+      throw new Error(response.statusText)
+    }
+    if ( error || parseError ) {
+      throw new Error(JSON.stringify(data))
+    }
+
+    return data.token
   })
 }
 
@@ -330,54 +364,11 @@ export const authorizeOtpToken = ( auth ) => ( { fn, authActions, errActions } )
   authActions.receiveOtp(false)
 
   let { schema, name, email, otp } = auth
-
-  let fetchUrl = urljoin(schema.get("tokenUrl"), "/tokens")
-
-  let query = {
-    service: schema.get("service"),
-    expiry: schema.get("tokenExpiry")
-  }
-
   let body = JSON.stringify({ email, otp })
 
-  let headers = {
-    "Accept":"application/json, text/plain, */*",
-    "Content-Type": "application/json"
-  }
-
-  fn.fetch({
-    url: fetchUrl,
-    method: "post",
-    headers,
-    query,
-    body
-  })
-  .then(function (response) {
-    let response_data = JSON.parse(response.data)
-    let error = response_data && ( response_data.error || "" )
-    let parseError = response_data && ( response_data.parseError || "" )
-
-    if ( !response.ok ) {
-      errActions.newAuthErr( {
-        authId: name,
-        level: "error",
-        source: "auth",
-        message: response.statusText
-      } )
-      return
-    }
-
-    if ( error || parseError ) {
-      errActions.newAuthErr({
-        authId: name,
-        level: "error",
-        source: "auth",
-        message: JSON.stringify(response_data)
-      })
-      return
-    }
-
-    auth.token = response_data.token
+  exchangeToken(fn, schema, body)
+  .then(function (token) {
+    auth.token = token
     auth.email = email
     authActions.authorize({ auth })
     authActions.showDefinitions(false)
@@ -391,6 +382,6 @@ export const authorizeOtpToken = ( auth ) => ( { fn, authActions, errActions } )
       level: "",
       source: "",
       message: err.message
-    } )
+    })
   })
 }
