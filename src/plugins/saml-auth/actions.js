@@ -50,8 +50,8 @@ export const authenticateWithSamlToken = (authId, schema, samlToken) => ( { fn, 
   })
   .catch((e) => {
     const errMessage = e.response && e.response.body
-    ? e.response.body.message // response error
-    : e.message // normal error
+    ? e.response.body.message // prioritise response error
+    : e.message // normal error message
 
     propagateAuthError(`Unauthorized. ${errMessage}`)
   })

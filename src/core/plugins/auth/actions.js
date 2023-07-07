@@ -343,7 +343,7 @@ export const exchangeToken = (fn, specSelectors, body) => {
     method: "post",
     headers,
     query,
-    body
+    body: JSON.stringify(body)
   }).then((response) => {
     const data = JSON.parse(response.data)
     const error = data && ( data.error || "" )
@@ -363,25 +363,30 @@ export const exchangeToken = (fn, specSelectors, body) => {
 export const authorizeOtpToken = ( auth ) => ( { fn, authActions, errActions, specSelectors } ) => {
   authActions.receiveOtp(false)
 
-  let { name, email, otp } = auth
-  let body = JSON.stringify({ email, otp })
+  let { name: authId, email, otp } = auth
 
-  exchangeToken(fn, specSelectors, body)
+  exchangeToken(fn, specSelectors, { email, otp })
   .then(function (token) {
-    auth.token = token
-    auth.email = email
-    authActions.authorize({ auth })
+    authActions.authorize({
+      [authId]: {
+        ...auth,
+        email,
+        token: token
+      }
+    })
+
     authActions.showDefinitions(false)
   })
   .catch(e => {
-    let err = new Error(e)
-    err.message = "Unauthorized. " + e.response.body.message
+    const errMessage = e.response && e.response.body
+    ? e.response.body.message // prioritise response error
+    : e.message // normal error message
 
     errActions.newAuthErr( {
-      authId: name,
+      authId,
       level: "",
       source: "",
-      message: err.message
+      message: `Unauthorized. ${errMessage}`
     })
   })
 }
