@@ -6,6 +6,8 @@ import reducers from "./reducers"
 import { Map } from "immutable"
 import { createSelector } from "reselect"
 
+import "./saml-auth.css"
+
 let engaged = false
 const samlAuthPlugin = () => {
   return {
