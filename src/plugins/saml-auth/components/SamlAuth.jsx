@@ -1,6 +1,11 @@
 import PropTypes from "prop-types"
 import React from "react"
 
+import {
+  SAML_AUTH_STATE_LOGGING_IN,
+  SAML_AUTH_STATE_LOGGING_OUT,
+} from "../actions"
+
 export class SamlAuth extends React.Component {
   static propTypes = {
     name: PropTypes.string,
@@ -8,6 +13,7 @@ export class SamlAuth extends React.Component {
     getComponent: PropTypes.func.isRequired,
     schema: PropTypes.object.isRequired,
     samlAuthActions: PropTypes.object.isRequired,
+    samlAuthSelectors: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -28,19 +34,26 @@ export class SamlAuth extends React.Component {
   };
 
   render() {
-    const { name, getComponent, authorized } = this.props
+    const { name, getComponent, authorized, samlAuthSelectors } = this.props
 
-    const isAuthenticated = authorized && authorized.get(name)
     const Row = getComponent("Row")
     const Button = getComponent("Button")
 
+    const isAuthenticated = authorized && authorized.get(name)
+    const samlAuthState = samlAuthSelectors.samlAuthState()
+    const isLoading =
+      samlAuthState === SAML_AUTH_STATE_LOGGING_IN ||
+      samlAuthState === SAML_AUTH_STATE_LOGGING_OUT
+    const showLogoutButton = isAuthenticated && !isLoading
+
     return (
       <Row className="saml-auth">
-        {!isAuthenticated ? (
+        {isLoading && (
           <div className="loading-container saml-auth-info">
             <div className="loading"></div>
           </div>
-        ) : (
+        )}
+        {showLogoutButton && (
           <div className="field">
             <div className="input-group">
             <Button

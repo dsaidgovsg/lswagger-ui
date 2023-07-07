@@ -3,17 +3,8 @@ import AuthorizationPopup from "./components/AuthorizationPopup"
 import * as actions from "./actions"
 import * as selectors from "./selectors"
 import reducers from "./reducers"
-
-function getSamlSchema(system) {
-  const {
-    specSelectors: { specJson },
-  } = system
-
-  const schemaKey = specJson().getIn(["securityDefinitions"]).findKey((v) => v.get("saml"))
-  const schema = specJson().getIn(["securityDefinitions", schemaKey])
-
-  return [schemaKey, schema]
-}
+import { Map } from "immutable"
+import { createSelector } from "reselect"
 
 let engaged = false
 const samlAuthPlugin = () => {
@@ -31,44 +22,56 @@ const samlAuthPlugin = () => {
         reducers,
       },
       spec: {
+        selectors: {
+          samlSchemaEntry: createSelector(
+            state => state || Map(),
+            spec => {
+              const schemaKey = spec.getIn(["resolved", "securityDefinitions"], Map()).findKey((v) => v.get("saml"))
+              const schema = spec.getIn(["resolved", "securityDefinitions", schemaKey])
+
+              return schemaKey ? [schemaKey, schema] : undefined
+            }
+          )
+        },
         wrapActions: {
           updateSpec:
-            (ori) =>
+            (ori, system) =>
             (...args) => {
               engaged = true
+
+              const { specActions } = system
+              // 1. maintain loading state until url is checked
+              specActions.updateLoadingStatus("loading")
               return ori(...args)
             },
           updateJsonSpec:
             (ori, system) =>
             (...args) => {
               const authorize = () => {
-                const [authId, schema] = getSamlSchema(system)
+                const { samlAuthActions, specActions, specSelectors } = system
+                const [authId, schema] = specSelectors.samlSchemaEntry()
 
                 const urlParams = new URLSearchParams(window.location.search)
                 const samlToken = urlParams.get("SAMLToken")
                 const samlError = urlParams.get("SAMLError")
 
-                const { authSelectors, authActions, errActions, samlAuthActions } = system
-                const authorizableDefinitions =authSelectors.definitionsToAuthorize()
+                if(samlError || samlToken)
+                  window.history.pushState({}, document.title, window.location.pathname)
 
-                if(samlError) {
-                  authActions.showDefinitions(authorizableDefinitions)
-                  samlAuthActions.setSamlAuthState(actions.SAML_AUTH_STATE_FAILED)
-                  errActions.newAuthErr({
-                    authId,
-                    level: "",
-                    source: "auth",
-                    message: samlError
-                  })
+                switch(true) {
+                  case !!samlError:
+                    samlAuthActions.newSamlAuthErr(samlError)
+                    break
+                  case !!samlToken:
+                    samlAuthActions.authenticateWithSamlToken(
+                      authId,
+                      schema,
+                      samlToken,
+                      () => specActions.updateLoadingStatus("success")
+                    )
+                    return
                 }
-                else if (samlToken) {
-                  authActions.showDefinitions(authorizableDefinitions)
-                  samlAuthActions.authenticateWithSamlToken(
-                    authId,
-                    schema,
-                    samlToken
-                  )
-                }
+                specActions.updateLoadingStatus("success")
               }
 
               if (engaged) {

@@ -8,7 +8,9 @@ export default class Auths extends React.Component {
     getComponent: PropTypes.func.isRequired,
     authSelectors: PropTypes.object.isRequired,
     authActions: PropTypes.object.isRequired,
-    specSelectors: PropTypes.object.isRequired
+    specSelectors: PropTypes.object.isRequired,
+    samlAuthActions: PropTypes.object.isRequired,
+    samlAuthSelectors: PropTypes.object.isRequired,
   }
 
   constructor(props, context) {
@@ -43,7 +45,10 @@ export default class Auths extends React.Component {
   }
 
   render() {
-    let { definitions, getComponent, authSelectors, errSelectors, samlAuthActions } = this.props
+    const {
+      definitions, getComponent, authSelectors, errSelectors, samlAuthActions, samlAuthSelectors
+    } = this.props
+
     const ApiKeyAuth = getComponent("apiKeyAuth")
     const BasicAuth = getComponent("basicAuth")
     const BasicJwtAuth = getComponent("basicJwtAuth", true)
@@ -52,7 +57,6 @@ export default class Auths extends React.Component {
     const Oauth2 = getComponent("oauth2", true)
 
     let authorized = authSelectors.authorized()
-
     let isOtpAuthDefinition = (schema) => schema.get("type") === "apiKey" && schema.get("otp")
     let isSamlAuthDefinition = (schema) => schema.get("type") === "apiKey" && schema.get("saml")
     let nonOauthDefinitions = definitions.filter( schema => schema.get("type") !== "oauth2" && !isOtpAuthDefinition(schema) && !isSamlAuthDefinition(schema))
@@ -160,6 +164,7 @@ export default class Auths extends React.Component {
                       authorized={authorized}
                       getComponent={getComponent}
                       samlAuthActions={samlAuthActions}
+                      samlAuthSelectors={samlAuthSelectors}
                     />
                   </div>)
                 }
