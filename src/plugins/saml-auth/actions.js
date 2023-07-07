@@ -3,11 +3,6 @@ import urljoin from "url-join"
 
 import { exchangeToken } from "../../core/plugins/auth/actions"
 
-export const setSamlAuthState = (state) => ({
-  type: SET_SAML_AUTH_STATE,
-  payload: state
-})
-
 export const newSamlAuthErr = (samlError) =>
     async ({ authActions, errActions, authSelectors, specSelectors }) => {
   const authorizableDefinitions = authSelectors.definitionsToAuthorize()
@@ -57,20 +52,18 @@ export const authenticateWithSamlToken = (authId, schema, samlToken, done) =>
   .finally(done)
 }
 
-export const loginSaml = () => async ({ specSelectors, samlAuthActions }) => {
+export const loginSaml = () => async ({ specSelectors }) => {
   const loginUrl = `${specSelectors.service()}/saml/sso`
   const redirectUrl = encodeURIComponent(window.location.origin)
-  samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGING_IN)
 
   window.location.href = urljoin(loginUrl, `?RelayState=${redirectUrl}`)
 }
 
 export const logoutSaml = (name) =>
-    async ( { authActions, authSelectors, specSelectors, samlAuthActions } ) => {
+    async ( { authActions, authSelectors, specSelectors } ) => {
   const logoutUrl = `${specSelectors.service()}/saml/slo`
   const redirectUrl = encodeURIComponent(window.location.origin)
   const email = authSelectors.authorized().getIn([name, "email"])
-  samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGING_OUT)
 
   window.location.href = urljoin(logoutUrl, `?email=${email}&RelayState=${redirectUrl}`)
   authActions.logout([name])
