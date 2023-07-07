@@ -24,7 +24,7 @@ This plugin provides SAML authentication option for swagger-ui. Please note ther
 
 ### StatePlugins
 
-#### SamlAuth.actions
+#### samlAuth.actions
 
 `SamAuth.actions` adds:
 1. `setSamlAuthState` - set different auth state
@@ -33,12 +33,25 @@ This plugin provides SAML authentication option for swagger-ui. Please note ther
 4. `loginSaml` - redirect to saml login page
 5. `logoutSaml` - redirect to saml logout page
 
-### SamlAuth.reducers
+### samlAuth.reducers
 
 `SamlAuth.reducers` reduces:
-1. `samlAuthState` - state of SAML auth
+1. `samlAuthState` - state of SAML auth, e.g. loading
 
-### SamlAuth.selectors
+### samlAuth.selectors
 
 `SamlAuth.selectors` selects:
-1. `samlAuthState` - state of SAML auth
+1. `samlAuthState` - state of SAML auth, e.g. loading
+
+### spec.selectors
+
+`spec.selectors` selects:
+1. `samlSchemaEntry` - get SAML schema entry from spec
+
+### spec.wrapActions
+
+`spec.wrapActions` wraps:
+1. `updateJsonSpec` - handle SAMLToken and SAMLError query params
+2. `updateSpec` - add flag and keep loading state for (1)
+
+
