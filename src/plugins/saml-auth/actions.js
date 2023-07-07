@@ -28,7 +28,6 @@ export const newSamlAuthErr = (samlError) =>
 
 export const authenticateWithSamlToken = (authId, schema, samlToken, done) =>
     ( { fn, samlAuthActions, authActions, specSelectors } ) => {
-  samlAuthActions.setSamlAuthState(SAML_AUTH_STATE_LOGGING_IN)
 
   // 1. decode jwt
   let decoded
