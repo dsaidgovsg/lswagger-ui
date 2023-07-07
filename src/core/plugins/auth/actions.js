@@ -363,10 +363,10 @@ export const exchangeToken = (fn, specSelectors, body) => {
 export const authorizeOtpToken = ( auth ) => ( { fn, authActions, errActions, specSelectors } ) => {
   authActions.receiveOtp(false)
 
-  let { schema, name, email, otp } = auth
+  let { name, email, otp } = auth
   let body = JSON.stringify({ email, otp })
 
-  exchangeToken(fn, schema, body)
+  exchangeToken(fn, specSelectors, body)
   .then(function (token) {
     auth.token = token
     auth.email = email

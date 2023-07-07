@@ -43,7 +43,7 @@ export default class Auths extends React.Component {
   }
 
   render() {
-    let { definitions, getComponent, authSelectors, errSelectors, samlAuthActions, specSelectors } = this.props
+    let { definitions, getComponent, authSelectors, errSelectors, samlAuthActions } = this.props
     const ApiKeyAuth = getComponent("apiKeyAuth")
     const BasicAuth = getComponent("basicAuth")
     const BasicJwtAuth = getComponent("basicJwtAuth", true)
