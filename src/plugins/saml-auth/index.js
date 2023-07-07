@@ -1,8 +1,6 @@
 import SamlAuth from "./components/SamlAuth"
 import AuthorizationPopup from "./components/AuthorizationPopup"
 import * as actions from "./actions"
-import * as selectors from "./selectors"
-import reducers from "./reducers"
 import { Map } from "immutable"
 import { createSelector } from "reselect"
 
@@ -19,9 +17,7 @@ const samlAuthPlugin = () => {
     // refer to https://github.com/swagger-api/swagger-ui/blob/master/src/core/plugins/on-complete/index.js
     statePlugins: {
       samlAuth: {
-        actions,
-        selectors,
-        reducers,
+        actions
       },
       spec: {
         selectors: {

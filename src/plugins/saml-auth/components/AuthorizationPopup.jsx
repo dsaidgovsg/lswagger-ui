@@ -12,7 +12,6 @@ export default class AuthorizationPopup extends React.Component {
     authActions: PropTypes.object.isRequired,
     errActions: PropTypes.object.isRequired,
     samlAuthActions: PropTypes.object.isRequired,
-    samlAuthSelectors: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -38,7 +37,6 @@ export default class AuthorizationPopup extends React.Component {
 
   render() {
     let {
-      samlAuthSelectors,
       samlAuthActions,
       authSelectors,
       authActions,
@@ -115,7 +113,6 @@ export default class AuthorizationPopup extends React.Component {
                           authActions={authActions}
                           specSelectors={specSelectors}
                           samlAuthActions={samlAuthActions}
-                          samlAuthSelectors={samlAuthSelectors}
                         />
                       )
                     })}

@@ -1,11 +1,6 @@
 import PropTypes from "prop-types"
 import React from "react"
 
-import {
-  SAML_AUTH_STATE_LOGGING_IN,
-  SAML_AUTH_STATE_LOGGING_OUT,
-} from "../actions"
-
 export class SamlAuth extends React.Component {
   static propTypes = {
     name: PropTypes.string,
@@ -13,11 +8,11 @@ export class SamlAuth extends React.Component {
     getComponent: PropTypes.func.isRequired,
     schema: PropTypes.object.isRequired,
     samlAuthActions: PropTypes.object.isRequired,
-    samlAuthSelectors: PropTypes.object.isRequired,
   };
 
   constructor(props) {
     super(props)
+    this.state = { isLoading: false }
   }
 
   componentDidMount() {
@@ -25,25 +20,24 @@ export class SamlAuth extends React.Component {
 
     if (authorized.size === 0) {
       samlAuthActions.loginSaml()
+      this.setState({ isLoading: true })
     }
   }
 
   handleLogoutClick = () => {
     const { samlAuthActions, name } = this.props
     samlAuthActions.logoutSaml(name)
+    this.setState({ isLoading: true })
   };
 
   render() {
-    const { name, getComponent, authorized, samlAuthSelectors } = this.props
+    const { name, getComponent, authorized } = this.props
+    const { isLoading } = this.state
 
     const Row = getComponent("Row")
     const Button = getComponent("Button")
 
     const isAuthenticated = authorized && authorized.get(name)
-    const samlAuthState = samlAuthSelectors.samlAuthState()
-    const isLoading =
-      samlAuthState === SAML_AUTH_STATE_LOGGING_IN ||
-      samlAuthState === SAML_AUTH_STATE_LOGGING_OUT
     const showLogoutButton = isAuthenticated && !isLoading
 
     return (

@@ -2,9 +2,6 @@ import jwtDecode from "jwt-decode"
 import urljoin from "url-join"
 
 import { exchangeToken } from "../../core/plugins/auth/actions"
-export const SET_SAML_AUTH_STATE = "SET_SAML_TOKEN_STATE"
-export const SAML_AUTH_STATE_LOGGING_IN = "SAML_AUTH_STATE_LOGGING_IN"
-export const SAML_AUTH_STATE_LOGGING_OUT = "SAML_AUTH_STATE_LOGGING_OUT"
 
 export const setSamlAuthState = (state) => ({
   type: SET_SAML_AUTH_STATE,

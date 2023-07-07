@@ -10,7 +10,6 @@ export default class Auths extends React.Component {
     authActions: PropTypes.object.isRequired,
     specSelectors: PropTypes.object.isRequired,
     samlAuthActions: PropTypes.object.isRequired,
-    samlAuthSelectors: PropTypes.object.isRequired,
   }
 
   constructor(props, context) {
@@ -46,7 +45,7 @@ export default class Auths extends React.Component {
 
   render() {
     const {
-      definitions, getComponent, authSelectors, errSelectors, samlAuthActions, samlAuthSelectors
+      definitions, getComponent, authSelectors, errSelectors, samlAuthActions
     } = this.props
 
     const ApiKeyAuth = getComponent("apiKeyAuth")
@@ -164,7 +163,6 @@ export default class Auths extends React.Component {
                       authorized={authorized}
                       getComponent={getComponent}
                       samlAuthActions={samlAuthActions}
-                      samlAuthSelectors={samlAuthSelectors}
                     />
                   </div>)
                 }
