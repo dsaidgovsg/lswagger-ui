@@ -26,8 +26,8 @@ export class SamlAuth extends React.Component {
 
   handleLogoutClick = () => {
     const { samlAuthActions, name } = this.props
-    samlAuthActions.logoutSaml(name)
     this.setState({ isLoading: true })
+    samlAuthActions.logoutSaml(name)
   };
 
   render() {
@@ -48,16 +48,12 @@ export class SamlAuth extends React.Component {
           </div>
         )}
         {showLogoutButton && (
-          <div className="field">
-            <div className="input-group">
-            <Button
-              className="btn modal-btn auth authorize"
-              onClick={this.handleLogoutClick}
-            >
-              Logout
-            </Button>
-            </div>
-          </div>
+          <Button
+            className="btn modal-btn auth authorize"
+            onClick={this.handleLogoutClick}
+          >
+            Logout
+          </Button>
         )}
       </Row>
     )

@@ -60,11 +60,10 @@ export const loginSaml = () => async ({ specSelectors }) => {
 }
 
 export const logoutSaml = (name) =>
-    async ( { authActions, authSelectors, specSelectors } ) => {
+    async ( { authSelectors, specSelectors } ) => {
   const logoutUrl = `${specSelectors.service()}/saml/slo`
   const redirectUrl = encodeURIComponent(window.location.origin)
   const email = authSelectors.authorized().getIn([name, "email"])
 
   window.location.href = urljoin(logoutUrl, `?email=${email}&RelayState=${redirectUrl}`)
-  authActions.logout([name])
 }
