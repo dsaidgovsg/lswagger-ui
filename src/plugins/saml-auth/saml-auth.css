@@ -26,6 +26,10 @@
 }
 
 /* Auth form */
+.saml-auth {
+  text-align: center;
+}
+
 .field {
   display: flex;
   align-items: baseline;
