@@ -371,7 +371,7 @@ export const authorizeOtpToken = ( auth ) => ( { fn, authActions, errActions, sp
       [authId]: {
         ...auth,
         email,
-        token: token
+        token,
       }
     })
 

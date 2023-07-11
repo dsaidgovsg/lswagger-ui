@@ -37,7 +37,7 @@ export const authenticateWithSamlToken = (authId, schema, samlToken, done) =>
       [authId]: {
         name: authId,
         email: decoded.sub,
-        token: token,
+        token,
         schema
       }
     })

@@ -56,18 +56,17 @@ const samlAuthPlugin = () => {
                 if(samlError || samlToken)
                   window.history.pushState({}, document.title, window.location.pathname)
 
-                switch(true) {
-                  case !!samlError:
-                    samlAuthActions.newSamlAuthErr(samlError)
-                    break
-                  case !!samlToken:
-                    samlAuthActions.authenticateWithSamlToken(
-                      authId,
-                      schema,
-                      samlToken,
-                      () => specActions.updateLoadingStatus("success")
-                    )
-                    return
+                if(samlError) {
+                  samlAuthActions.newSamlAuthErr(samlError)
+                }
+                else if(samlToken) {
+                  samlAuthActions.authenticateWithSamlToken(
+                    authId,
+                    schema,
+                    samlToken,
+                    () => specActions.updateLoadingStatus("success")
+                  )
+                  return
                 }
                 specActions.updateLoadingStatus("success")
               }

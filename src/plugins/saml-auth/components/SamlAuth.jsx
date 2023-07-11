@@ -6,7 +6,6 @@ export class SamlAuth extends React.Component {
     name: PropTypes.string,
     authorized: PropTypes.object,
     getComponent: PropTypes.func.isRequired,
-    schema: PropTypes.object.isRequired,
     samlAuthActions: PropTypes.object.isRequired,
   };
 

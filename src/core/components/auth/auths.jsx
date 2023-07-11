@@ -8,7 +8,7 @@ export default class Auths extends React.Component {
     getComponent: PropTypes.func.isRequired,
     authSelectors: PropTypes.object.isRequired,
     authActions: PropTypes.object.isRequired,
-    specSelectors: PropTypes.object.isRequired,
+    errSelectors: PropTypes.object.isRequired,
     samlAuthActions: PropTypes.object.isRequired,
   }
 
@@ -173,15 +173,5 @@ export default class Auths extends React.Component {
 
       </div>
     )
-  }
-
-  static propTypes = {
-    samlAuthActions: PropTypes.object.isRequired,
-    errSelectors: PropTypes.object.isRequired,
-    getComponent: PropTypes.func.isRequired,
-    authSelectors: PropTypes.object.isRequired,
-    specSelectors: PropTypes.object.isRequired,
-    authActions: PropTypes.object.isRequired,
-    definitions: ImPropTypes.iterable.isRequired
   }
 }
