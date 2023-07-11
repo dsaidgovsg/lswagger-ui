@@ -19,12 +19,6 @@
   font-weight: 300;
 }
 
-.swagger-ui .dialog-ux div.modal-ux-header {
-  justify-content: center;
-  padding: 0px;
-  border-bottom: none;
-}
-
 /* Auth form */
 .saml-auth {
   text-align: center;
@@ -94,6 +88,12 @@ div.modal-ux-content {
   width: 250px;
   margin-top: 30px;
   flex: none;
+}
+
+.swagger-ui .dialog-ux div.modal-ux-header {
+  justify-content: center;
+  padding: 0px;
+  border-bottom: none;
 }
 
 .swagger-ui .dialog-ux .modal-ux-header .close-modal {
