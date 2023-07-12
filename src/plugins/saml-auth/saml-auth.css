@@ -14,7 +14,7 @@
 }
 
 .swagger-ui .modal-ux-content .btn.definition-option-btn p {
-	font-family: Titillium Web, sans-serif;
+  font-family: Titillium Web, sans-serif;
   font-size: 14px;
   font-weight: 300;
 }
@@ -61,7 +61,7 @@
   background: #f3fffe;
   font-weight: 300;
   line-height: 125%;
-	border-radius: 4px;
+  border-radius: 4px;
 }
 
 /* Overrides AuthorizationPopup */
