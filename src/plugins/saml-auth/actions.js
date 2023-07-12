@@ -27,6 +27,7 @@ export const authenticateWithSamlToken = (authId, schema, samlToken, done) =>
     decoded = jwtDecode(samlToken)
   } catch(decodeErr) {
     samlAuthActions.newSamlAuthErr(`SAML token error. ${decodeErr.message}`)
+    done()
     return
   }
 
