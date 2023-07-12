@@ -32,8 +32,11 @@ export default class DefinitionSelect extends React.Component {
           key={samlAuthId}
           onClick={this.handleSelect(samlAuthId)}
         >
-          <strong>Singapore Government Officers</strong>
-          <p>You have a Government issued email address. Login in using your WOG credentials</p>
+          <strong>WOG Login</strong>
+          <p>
+            You have a Whole-of-Government Active Directory (WOG AD) registered
+            email address. Log in using your WOG credentials
+          </p>
         </Button>
         <Button
           className="btn definition-option-btn"
@@ -41,8 +44,10 @@ export default class DefinitionSelect extends React.Component {
           key={otpAuthId}
           onClick={this.handleSelect(otpAuthId)}
         >
-          <strong>Others</strong>
-          <p>No Government issued email address. Log in using your email and OTP</p>
+          <strong>OTP Login</strong>
+          <p>
+            No WOG AD registered email address. Log in using your email and OTP
+          </p>
         </Button>
       </div>
     )
