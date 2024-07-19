@@ -16,7 +16,7 @@ export default function curl( request ){
       curlified.push( `"${h}: ${v}"` )
     }
     curlified.push( "-H " )
-    curlified.push( "Source: swagger" )
+    curlified.push( `"source: swagger"` )
   }
 
   if ( request.get("body") ){
