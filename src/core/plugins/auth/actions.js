@@ -277,7 +277,8 @@ export const sendOtp = ( auth ) => ( { fn, authActions, errActions, specSelector
 
   let headers = {
     "Accept":"application/json, text/plain, */*",
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "Source": "swagger"
   }
 
   fn.fetch({
