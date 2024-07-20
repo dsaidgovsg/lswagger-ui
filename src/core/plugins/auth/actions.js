@@ -207,7 +207,8 @@ export const authorizeBasicToken = ( auth ) => ( { fn, authActions, errActions }
   let query = {}
   let headers = {
     "Accept":"application/json, text/plain, */*",
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "Source": "swagger"
   }
 
   headers.Authorization = "Basic " + btoa(username + ":" + password)
