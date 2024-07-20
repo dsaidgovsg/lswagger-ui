@@ -57,15 +57,7 @@ export const loginSaml = () => async ({ specSelectors }) => {
   const loginUrl = `${specSelectors.service()}/saml/sso`
   const redirectUrl = encodeURIComponent(window.location.href)
 
-  const headers = {
-    "Authorization": "Bearer your_token_here" // Add your desired header here
-  }
-
-  const requestOptions = {
-    headers
-  }
-
-  window.location.href = urljoin(loginUrl, `?RelayState=${redirectUrl}`, requestOptions)
+  window.location.href = urljoin(loginUrl, `?RelayState=${redirectUrl}`)
 }
 
 export const logoutSaml = (name) =>

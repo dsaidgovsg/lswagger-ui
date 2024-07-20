@@ -146,7 +146,8 @@ export const authorizeRequest = ( data ) => ( { fn, authActions, errActions, aut
   let _headers = Object.assign({
     "Accept":"application/json, text/plain, */*",
     "Access-Control-Allow-Origin": "*",
-    "Content-Type": "application/x-www-form-urlencoded"
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Source": "swagger"
   }, headers)
 
   fn.fetch({
