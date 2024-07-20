@@ -146,8 +146,7 @@ export const authorizeRequest = ( data ) => ( { fn, authActions, errActions, aut
   let _headers = Object.assign({
     "Accept":"application/json, text/plain, */*",
     "Access-Control-Allow-Origin": "*",
-    "Content-Type": "application/x-www-form-urlencoded",
-    "Source": "swagger"
+    "Content-Type": "application/x-www-form-urlencoded"
   }, headers)
 
   fn.fetch({
@@ -207,8 +206,7 @@ export const authorizeBasicToken = ( auth ) => ( { fn, authActions, errActions }
   let query = {}
   let headers = {
     "Accept":"application/json, text/plain, */*",
-    "Content-Type": "application/json",
-    "Source": "swagger"
+    "Content-Type": "application/json"
   }
 
   headers.Authorization = "Basic " + btoa(username + ":" + password)

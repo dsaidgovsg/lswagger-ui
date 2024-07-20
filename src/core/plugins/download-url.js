@@ -16,8 +16,7 @@ export default function downloadUrlPlugin (toolbox) {
         loadSpec: true,
         credentials: "same-origin",
         headers: {
-          "Accept": "application/json,*/*",
-          "Source": "swagger"
+          "Accept": "application/json,*/*"
         }
       }).then(next,next)
 
