@@ -9,12 +9,20 @@ const createExecutor = (origExecutor) => (opts) => {
       let request = origRequestInterceptor ? origRequestInterceptor(req) : req
       if(typeof request === "string") {
         request = {
-          url: req,
+          ...req,
+          headers: {
+            ...req.headers,
+            "Source": "swagger"
+          },
           credentials: "omit"
         }
       }else {
         request = {
           ...req,
+          headers: {
+            ...req.headers,
+            "Source": "swagger"
+          },
           credentials: "omit"
         }
       }
