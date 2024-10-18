@@ -55,6 +55,7 @@ export default class OperationTag extends React.Component {
     const ArrowDownIcon = getComponent("ArrowDownIcon")
 
     let tagDescription = tagObj.getIn(["tagDetails", "description"], null)
+    let tagNotes= tagObj.getIn(["tagDetails", "notes"], null)
     let tagExternalDocsDescription = tagObj.getIn(["tagDetails", "externalDocs", "description"])
     let rawTagExternalDocsUrl = tagObj.getIn(["tagDetails", "externalDocs", "url"])
     let tagExternalDocsUrl
@@ -112,6 +113,7 @@ export default class OperationTag extends React.Component {
         </h3>
 
         <Collapse isOpened={showTag}>
+          { !tagNotes ? null : <div><Markdown source={ tagNotes } /></div> }
           {children}
         </Collapse>
       </div>

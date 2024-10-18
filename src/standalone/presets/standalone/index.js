@@ -2,12 +2,12 @@
  * @prettier
  */
 import StandaloneLayoutPlugin from "standalone/plugins/stadalone-layout"
-import TopBarPlugin from "standalone/plugins/top-bar"
+import LocusTopBarPlugin from "standalone/plugins/locus-top-bar"
 import ConfigsPlugin from "core/plugins/configs"
 import SafeRenderPlugin from "core/plugins/safe-render"
 
 const StandalonePreset = [
-  TopBarPlugin,
+  LocusTopBarPlugin,
   ConfigsPlugin,
   StandaloneLayoutPlugin,
   SafeRenderPlugin({
