@@ -123,7 +123,7 @@ export default class OtpJwtAuth extends React.Component {
           }
           {
             isOtpSent ? <div className="login-info">
-                          OTP sent. Please check your email inbox.
+                          OTP will be sent if the email is a valid user. Please check your email inbox.
                         </div>
                       : null
           }
