@@ -328,7 +328,7 @@ export const sendOtp = ( auth ) => ( { fn, authActions, errActions, specSelector
 }
 
 export const exchangeToken = (fn, specSelectors, body) => {
-  const fetchUrl = urljoin(specSelectors.tokenUrl(), "/tokens")
+  const fetchUrl = urljoin(specSelectors.tokenUrl(), "/login")
   const query = {
     service: specSelectors.service(),
     expiry: specSelectors.tokenExpiry()
